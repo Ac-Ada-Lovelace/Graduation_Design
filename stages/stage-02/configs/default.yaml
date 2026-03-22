@@ -1,0 +1,34 @@
+project:
+  name: stage-02-nilm
+  seed: 42
+
+dataset:
+  name: uk-dale
+  raw_root: ./data/raw/uk-dale
+  processed_root: ./data/processed
+  house: house_1
+  appliances: [kettle, microwave, fridge]
+  model_sample_period_s: 1
+  timezone: Europe/London
+
+experiment:
+  window_size_candidates: [301, 601, 1201]
+  default_window_size: 601
+  comment: "Keep this list for one-command window-size comparison"
+
+train:
+  batch_size: 64
+  epochs: 20
+  learning_rate: 0.0001
+  num_workers: 4
+
+export:
+  format: onnx
+  opset: 17
+  out_dir: ./artifacts/models
+
+service:
+  host: 127.0.0.1
+  port: 18080
+  session_mode: single_user
+
