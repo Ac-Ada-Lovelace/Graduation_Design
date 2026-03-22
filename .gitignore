@@ -11,3 +11,6 @@
 
 # Logs
 *.log
+
+# Local .NET CLI home
+.dotnet-local/
