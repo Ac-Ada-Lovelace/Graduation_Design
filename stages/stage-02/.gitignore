@@ -1,10 +1,10 @@
-# Raw datasets and generated artifacts
-data/raw/
-data/processed/
-artifacts/
-runs/
-logs/
-
 # Python cache
 __pycache__/
 *.pyc
+
+# Model generated files
+model/data/raw/
+model/data/processed/
+model/artifacts/
+model/runs/
+model/logs/
