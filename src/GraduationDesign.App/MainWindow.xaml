@@ -1,0 +1,210 @@
+﻿<Window x:Class="GraduationDesign.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="数据采集后台"
+        Width="1440"
+        Height="920"
+        MinWidth="1200"
+        MinHeight="760"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Style="{StaticResource CardBorderStyle}" Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="360" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock FontSize="28" FontWeight="SemiBold" Foreground="#FF173042" Text="数据采集后台原型" />
+                    <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="#FF587282" Text="真实 TCP 收包、协议解析、多终端状态观察、报文级下钻" />
+                </StackPanel>
+
+                <Border Grid.Column="1" HorizontalAlignment="Right" Background="{StaticResource AccentSoftBrush}" CornerRadius="10" Padding="14,10">
+                    <StackPanel>
+                        <TextBlock FontSize="13" Foreground="#FF46606F" Text="{Binding ServerStatusText}" />
+                        <TextBlock Margin="0,4,0,0" FontSize="13" Foreground="#FF173042" Text="{Binding ListenerText}" />
+                        <TextBlock Margin="0,4,0,0" FontSize="12" Foreground="#FF587282" Text="{Binding StorageText}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <UniformGrid Grid.Row="1" Margin="0,0,0,12" Rows="1" Columns="4">
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,12,12">
+                <StackPanel>
+                    <TextBlock FontSize="13" Foreground="#FF587282" Text="在线终端" />
+                    <TextBlock Margin="0,10,0,0" FontSize="28" FontWeight="SemiBold" Foreground="#FF173042" Text="{Binding OnlineDeviceCount}" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,12,12">
+                <StackPanel>
+                    <TextBlock FontSize="13" Foreground="#FF587282" Text="累计报文" />
+                    <TextBlock Margin="0,10,0,0" FontSize="28" FontWeight="SemiBold" Foreground="#FF173042" Text="{Binding TotalPacketCount}" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,12,12">
+                <StackPanel>
+                    <TextBlock FontSize="13" Foreground="#FF587282" Text="异常报文" />
+                    <TextBlock Margin="0,10,0,0" FontSize="28" FontWeight="SemiBold" Foreground="#FF173042" Text="{Binding ErrorPacketCount}" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardBorderStyle}" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock FontSize="13" Foreground="#FF587282" Text="当前接收速率" />
+                    <TextBlock Margin="0,10,0,0" FontSize="28" FontWeight="SemiBold" Foreground="#FF173042" Text="{Binding PacketsPerSecondText}" />
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="320" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource CardBorderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel>
+                        <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="#FF173042" Text="终端总览" />
+                        <TextBlock Margin="0,6,0,0" FontSize="12" Foreground="#FF587282" Text="主页聚焦 A 相功率实时小折线，点击卡片进入单终端详情页" />
+                    </StackPanel>
+
+                    <ScrollViewer Grid.Row="1" Margin="0,16,0,0" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding Devices}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="5" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Style="{StaticResource CardButtonStyle}" Width="196" Click="DeviceCard_Click" Tag="{Binding}">
+                                        <StackPanel>
+                                            <DockPanel>
+                                                <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#FF173042" Text="{Binding DisplayName}" />
+                                                <Border DockPanel.Dock="Right"
+                                                        Background="{Binding StatusBrush}"
+                                                        CornerRadius="8"
+                                                        Padding="8,2"
+                                                        Margin="8,0,0,0">
+                                                    <TextBlock FontSize="11" Foreground="White" Text="{Binding StatusText}" />
+                                                </Border>
+                                            </DockPanel>
+
+                                            <TextBlock Margin="0,8,0,0" FontSize="11" Foreground="#FF587282" Text="{Binding DeviceCodeText}" />
+
+                                            <Grid Margin="0,10,0,0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+
+                                                <DockPanel>
+                                                    <TextBlock FontSize="12" Foreground="#FF587282" Text="A 相功率" />
+                                                    <TextBlock DockPanel.Dock="Right"
+                                                               FontSize="12"
+                                                               FontWeight="SemiBold"
+                                                               Foreground="{StaticResource AccentBrush}"
+                                                               Text="{Binding LatestPowerAText}" />
+                                                </DockPanel>
+
+                                                <Border Grid.Row="1"
+                                                        Margin="0,8,0,0"
+                                                        Background="#FFF4F9FB"
+                                                        BorderBrush="#FFD7E9EF"
+                                                        BorderThickness="1"
+                                                        CornerRadius="8"
+                                                        Padding="8">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+
+                                                        <Canvas Width="160" Height="54" HorizontalAlignment="Center">
+                                                            <Rectangle Width="160" Height="54" RadiusX="6" RadiusY="6" Fill="#FFF8FCFD" />
+                                                            <Polyline Points="{Binding PowerTrendPoints}"
+                                                                      Stroke="{StaticResource AccentBrush}"
+                                                                      StrokeThickness="1.6"
+                                                                      StrokeLineJoin="Round"
+                                                                      StrokeStartLineCap="Round"
+                                                                      StrokeEndLineCap="Round" />
+                                                        </Canvas>
+
+                                                        <TextBlock Grid.Row="1"
+                                                                   Margin="0,8,0,0"
+                                                                   FontSize="11"
+                                                                   Foreground="#FF587282"
+                                                                   HorizontalAlignment="Right"
+                                                                   Text="{Binding TrendRangeText}" />
+                                                    </Grid>
+                                                </Border>
+                                            </Grid>
+
+                                            <TextBlock Margin="0,10,0,0" FontSize="11" Foreground="#FF173042" Text="{Binding LastReportTimeText}" TextWrapping="Wrap" />
+                                            <TextBlock Margin="0,4,0,0" FontSize="10" Foreground="#FF587282" Text="{Binding RemoteEndPoint}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="2" Style="{StaticResource CardBorderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel>
+                        <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="#FF173042" Text="最近事件" />
+                        <TextBlock Margin="0,6,0,0" FontSize="12" Foreground="#FF587282" Text="保留上线、离线和异常提示，主页不再用大列表挤占空间" />
+                    </StackPanel>
+
+                    <ListBox Grid.Row="1"
+                             Margin="0,16,0,0"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             ItemsSource="{Binding RecentEvents}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,0,10" Padding="12" Background="#FFF6FAFC" CornerRadius="8">
+                                    <StackPanel>
+                                        <TextBlock FontSize="12" Foreground="#FF587282" Text="{Binding TimestampText}" />
+                                        <TextBlock Margin="0,6,0,0"
+                                                   FontSize="13"
+                                                   Foreground="#FF173042"
+                                                   Text="{Binding Message}"
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

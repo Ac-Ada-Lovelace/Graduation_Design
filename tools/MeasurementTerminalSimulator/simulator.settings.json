@@ -1,0 +1,11 @@
+{
+  "AppConfigPath": "src/GraduationDesign.App/appsettings.json",
+  "ConnectHost": "",
+  "ConnectPort": 0,
+  "EnabledDeviceIds": [],
+  "EnabledDeviceIdRanges": [
+    "1-20"
+  ],
+  "SendIntervalMilliseconds": 1000,
+  "ReconnectDelayMilliseconds": 1500
+}
