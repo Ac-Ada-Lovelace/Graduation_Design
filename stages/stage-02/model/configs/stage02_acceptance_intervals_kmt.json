@@ -1,0 +1,25 @@
+{
+  "name": "stage02-kmt-fixed-intervals-v1",
+  "timezone": "UTC",
+  "description": "Fixed acceptance intervals for kettle+microwave+toaster package validation.",
+  "intervals": [
+    {
+      "id": "kmt_15m_a",
+      "start_utc": "2013-03-24 07:43:11+00:00",
+      "end_utc": "2013-03-24 08:00:24+00:00",
+      "minutes": 15
+    },
+    {
+      "id": "kmt_20m_a",
+      "start_utc": "2013-03-24 07:37:52+00:00",
+      "end_utc": "2013-03-24 08:00:24+00:00",
+      "minutes": 20
+    },
+    {
+      "id": "kmt_30m_a",
+      "start_utc": "2013-03-24 07:27:15+00:00",
+      "end_utc": "2013-03-24 08:00:24+00:00",
+      "minutes": 30
+    }
+  ]
+}

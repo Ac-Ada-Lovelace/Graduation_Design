@@ -1,0 +1,33 @@
+{
+  "registry_version": "1.0.0",
+  "updated_at_utc": "2026-03-23T10:20:00.588336+00:00",
+  "active_package": "artifacts/packages/kmt_multi_w301_20260323_155405_thopt_20260323_161139__event_optimized.zip",
+  "packages": [
+    {
+      "id": "kmt_event_optimized",
+      "path": "artifacts/packages/kmt_multi_w301_20260323_155405_thopt_20260323_161139__event_optimized.zip",
+      "profile": "event_optimized",
+      "status": "accepted",
+      "acceptance_report": "model/runs/acceptance_20260323_164509/report.json",
+      "aggregate": {
+        "mae_w_avg_of_intervals": 11.231684684753418,
+        "rmse_w_avg_of_intervals": 44.7314338684082,
+        "event_f1_avg_of_intervals": 1.0
+      },
+      "note": "Primary demo package."
+    },
+    {
+      "id": "kmt_error_optimized",
+      "path": "artifacts/packages/kmt_multi_w301_20260323_155405_calibrated_20260323_161136__error_optimized.zip",
+      "profile": "error_optimized",
+      "status": "accepted",
+      "acceptance_report": "model/runs/acceptance_20260323_164303/report.json",
+      "aggregate": {
+        "mae_w_avg_of_intervals": 12.903435707092285,
+        "rmse_w_avg_of_intervals": 62.740657806396484,
+        "event_f1_avg_of_intervals": 0.8333333134651184
+      },
+      "note": "Fallback package for quick rollback."
+    }
+  ]
+}

@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stage-02 NILM Demo Console</title>
+  <style>
+    :root {
+      --bg0: #eef3ee;
+      --bg1: #d7e4d8;
+      --ink: #1a231d;
+      --muted: #5a665d;
+      --line: #b8cbbb;
+      --card: #ffffffde;
+      --ok: #1f7a42;
+      --warn: #a5620d;
+      --bad: #8f2c2c;
+      --accent: #0f6577;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 15%, #fff 0%, transparent 40%),
+        radial-gradient(circle at 86% 82%, #e6f0f5 0%, transparent 38%),
+        linear-gradient(150deg, var(--bg0), var(--bg1));
+      min-height: 100vh;
+    }
+    #app { max-width: 1340px; margin: 0 auto; padding: 18px 16px 26px; }
+    .header { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin-bottom: 14px; }
+    h1 { margin: 0; font-size: 30px; }
+    .sub { margin-top: 4px; font-size: 13px; color: var(--muted); }
+    .badge { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 6px 12px; font-size: 13px; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+    .tab-btn {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 14px;
+      background: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .tab-btn.active { background: #dcedf2; border-color: #7aa9b5; color: #0f6070; }
+    .layout { display: grid; grid-template-columns: 360px 1fr; gap: 12px; }
+    .card { border: 1px solid var(--line); border-radius: 14px; background: var(--card); box-shadow: 0 6px 18px #00000011; }
+    .control { padding: 14px; }
+    .control h2 { margin: 0 0 10px; font-size: 18px; }
+    .field { margin-bottom: 10px; }
+    .field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    input, select, button {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 14px;
+      background: #fff;
+    }
+    button { cursor: pointer; font-weight: 600; }
+    button.primary { background: #d7edf2; border-color: #82afba; color: #0b596a; }
+    button.warn { background: #f4dfc9; border-color: #d2aa73; color: #8f5205; }
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .hint { font-size: 12px; color: var(--muted); line-height: 1.35; margin-top: 6px; }
+    .err { color: var(--bad); font-size: 13px; margin-top: 6px; white-space: pre-wrap; }
+    .content { display: grid; gap: 10px; }
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    .metric { border: 1px solid var(--line); border-radius: 10px; background: #fff; padding: 8px 10px; }
+    .metric .k { font-size: 12px; color: var(--muted); }
+    .metric .v { margin-top: 6px; font-size: 22px; font-weight: 700; color: var(--accent); }
+    .panel { border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 10px; }
+    .panel h3 { margin: 0 0 8px; font-size: 15px; }
+    .chart { width: 100%; height: 300px; }
+    .chart.small { height: 210px; }
+    .table-wrap { max-height: 260px; overflow: auto; border: 1px solid var(--line); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { border-bottom: 1px solid #e8efe8; padding: 6px 8px; text-align: left; }
+    th { position: sticky; top: 0; background: #f5faf5; z-index: 1; }
+    .events-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .event-list { border: 1px solid var(--line); border-radius: 10px; max-height: 220px; overflow: auto; background: #fff; }
+    .event-item { padding: 6px 8px; border-bottom: 1px solid #ebf2eb; font-size: 12px; display: flex; justify-content: space-between; gap: 8px; }
+    .event-item:last-child { border-bottom: 0; }
+    .tag { font-size: 11px; border-radius: 999px; color: #fff; padding: 1px 6px; }
+    .tag.on { background: var(--ok); }
+    .tag.off { background: var(--warn); }
+    @media (max-width: 1120px) {
+      .layout { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="header">
+      <div>
+        <h1>Stage-02 NILM Demo Console</h1>
+        <div class="sub">Vue + ECharts | 离线区间推理展示 + 在线实时回放展示</div>
+      </div>
+      <div class="badge" :style="{ color: statusColor }">{{ statusText }}</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn" :class="{active: tab==='offline'}" @click="tab='offline'">离线展示</button>
+      <button class="tab-btn" :class="{active: tab==='online'}" @click="tab='online'">在线模拟</button>
+    </div>
+
+    <div v-show="tab==='offline'" class="layout">
+      <div class="card control">
+        <h2>离线区间设置</h2>
+        <div class="field">
+          <label>预置区间</label>
+          <select v-model="offline.selectedPreset">
+            <option v-for="p in offline.presets" :key="p.id" :value="p.id">{{ p.label }}</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button @click="applyOfflinePreset">应用预置</button>
+          <button @click="refreshMeta">刷新元数据</button>
+        </div>
+        <div class="field">
+          <label>开始时间 (UTC)</label>
+          <input type="datetime-local" v-model="offline.startLocal">
+        </div>
+        <div class="field">
+          <label>结束时间 (UTC)</label>
+          <input type="datetime-local" v-model="offline.endLocal">
+        </div>
+        <div class="field">
+          <label>事件容差 (秒)</label>
+          <input type="number" min="1" v-model.number="offline.eventTolS">
+        </div>
+        <div class="field">
+          <label>返回点数上限（图表）</label>
+          <input type="number" min="200" step="100" v-model.number="offline.targetPoints">
+        </div>
+        <div class="field">
+          <label>查看电器</label>
+          <select v-model="offline.selectedApp">
+            <option v-for="a in appliances" :key="a" :value="a">{{ a }}</option>
+          </select>
+        </div>
+        <button class="primary" @click="runOfflineInfer">启动区间推理</button>
+        <div class="hint">展示内容：真值/预测曲线、diff、事件对比、事件时间差和误差指标。</div>
+        <div class="err" v-if="offline.error">{{ offline.error }}</div>
+      </div>
+
+      <div class="content">
+        <div class="metrics">
+          <div class="metric"><div class="k">MAE 平均</div><div class="v">{{ fmt(offline.metrics.mae_avg_w) }}</div></div>
+          <div class="metric"><div class="k">RMSE 平均</div><div class="v">{{ fmt(offline.metrics.rmse_avg_w) }}</div></div>
+          <div class="metric"><div class="k">MeanDiff 平均</div><div class="v">{{ fmt(offline.metrics.mean_diff_avg_w) }}</div></div>
+          <div class="metric"><div class="k">事件F1平均</div><div class="v">{{ fmt(offline.metrics.event_f1_avg, 4) }}</div></div>
+        </div>
+
+        <div class="panel">
+          <h3>功率对比（{{ offline.selectedApp || '-' }}）</h3>
+          <div id="offlineMainChart" class="chart"></div>
+        </div>
+        <div class="panel">
+          <h3>Pred-Real Diff（{{ offline.selectedApp || '-' }}）</h3>
+          <div id="offlineDiffChart" class="chart small"></div>
+        </div>
+        <div class="panel">
+          <h3>事件对比（上：真实，下：预测）</h3>
+          <div id="offlineEventChart" class="chart small"></div>
+          <div class="hint">{{ offlineEventHint }}</div>
+        </div>
+        <div class="panel">
+          <h3>事件匹配明细（{{ offline.selectedApp || '-' }}）</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>type</th><th>true_idx</th><th>pred_idx</th><th>delta_s</th><th>abs_delta_s</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(r, i) in offlineEventRows" :key="i">
+                  <td>{{ r.type }}</td>
+                  <td>{{ r.true_index }}</td>
+                  <td>{{ r.pred_index }}</td>
+                  <td>{{ r.delta_s }}</td>
+                  <td>{{ r.abs_delta_s }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-show="tab==='online'" class="layout">
+      <div class="card control">
+        <h2>在线回放设置</h2>
+        <div class="field">
+          <label>预置起点</label>
+          <select v-model="online.selectedPreset">
+            <option v-for="p in online.presets" :key="p.id" :value="p.id">{{ p.label }}</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button @click="applyOnlinePreset">应用预置</button>
+          <button @click="pollOnlineStatus">刷新状态</button>
+        </div>
+        <div class="field">
+          <label>开始时间 (UTC)</label>
+          <input type="datetime-local" v-model="online.startLocal">
+        </div>
+        <div class="field">
+          <label>结束时间 (UTC，可空)</label>
+          <input type="datetime-local" v-model="online.endLocal">
+        </div>
+        <div class="field">
+          <label>回放速度 (x)</label>
+          <input type="number" min="0.1" step="0.1" v-model.number="online.speed">
+        </div>
+        <div class="field">
+          <label>最大行数 (0 不限制)</label>
+          <input type="number" min="0" v-model.number="online.maxRows">
+        </div>
+        <div class="field">
+          <label>查看电器</label>
+          <select v-model="online.selectedApp">
+            <option v-for="a in appliances" :key="a" :value="a">{{ a }}</option>
+          </select>
+        </div>
+        <div class="btn-row">
+          <button class="primary" @click="startOnlineReplay">启动回放</button>
+          <button class="warn" @click="stopOnlineReplay">停止回放</button>
+        </div>
+        <div class="hint">并行展示真值/预测曲线，并展示真实事件和预测事件流。</div>
+        <div class="err" v-if="online.error">{{ online.error }}</div>
+      </div>
+
+      <div class="content">
+        <div class="metrics">
+          <div class="metric"><div class="k">运行状态</div><div class="v">{{ online.running ? 'RUN' : 'IDLE' }}</div></div>
+          <div class="metric"><div class="k">已发送行数</div><div class="v">{{ online.sentRows }}</div></div>
+          <div class="metric"><div class="k">预测计数</div><div class="v">{{ online.predCount }}</div></div>
+          <div class="metric"><div class="k">在线 MAE</div><div class="v">{{ fmt(online.metrics.mae_avg_w) }}</div></div>
+        </div>
+
+        <div class="panel">
+          <h3>在线功率对比（{{ online.selectedApp || '-' }}）</h3>
+          <div id="onlineMainChart" class="chart"></div>
+        </div>
+        <div class="panel">
+          <h3>在线 Pred-Real Diff（{{ online.selectedApp || '-' }}）</h3>
+          <div id="onlineDiffChart" class="chart small"></div>
+        </div>
+        <div class="panel">
+          <h3>事件流：真实 vs 预测</h3>
+          <div class="events-cols">
+            <div>
+              <div class="hint">真实事件（recent）</div>
+              <div class="event-list">
+                <div class="event-item" v-for="(e, i) in online.trueEvents" :key="'t'+i">
+                  <span>{{ e.device }} <span class="tag" :class="e.type">{{ e.type }}</span></span>
+                  <span>{{ e.timestamp_utc || '-' }}</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="hint">预测事件（recent）</div>
+              <div class="event-list">
+                <div class="event-item" v-for="(e, i) in online.predEvents" :key="'p'+i">
+                  <span>{{ e.device }} <span class="tag" :class="e.type">{{ e.type }}</span></span>
+                  <span>{{ e.timestamp_utc || '-' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./vendor/vue.global.prod.js"></script>
+  <script src="./vendor/echarts.min.js"></script>
+  <script>
+    if (!window.Vue || !window.echarts) {
+      const app = document.getElementById("app");
+      app.innerHTML = "<div style='padding:16px;border:1px solid #d99;background:#fff0f0;color:#8f2c2c'>前端依赖加载失败：请确认 <code>ui/vendor</code> 脚本可访问。</div>";
+      throw new Error("Vue/ECharts not loaded");
+    }
+    const { createApp, computed, nextTick, onBeforeUnmount, onMounted, reactive, toRefs, watch } = Vue;
+    createApp({
+      setup() {
+        const serviceBase = new URLSearchParams(location.search).get("service") || "http://127.0.0.1:18080";
+        const appState = reactive({
+          tab: "offline",
+          statusText: "Connecting...",
+          statusColor: "#8f2c2c",
+          appliances: [],
+          offline: {
+            presets: [],
+            selectedPreset: "",
+            startLocal: "",
+            endLocal: "",
+            eventTolS: 10,
+            targetPoints: 1200,
+            selectedApp: "",
+            error: "",
+            raw: null,
+            metrics: {}
+          },
+          online: {
+            presets: [],
+            selectedPreset: "",
+            startLocal: "",
+            endLocal: "",
+            speed: 20,
+            maxRows: 0,
+            selectedApp: "",
+            error: "",
+            running: false,
+            sentRows: 0,
+            predCount: 0,
+            metrics: {},
+            trueEvents: [],
+            predEvents: []
+          },
+          charts: {
+            offlineMain: null,
+            offlineDiff: null,
+            offlineEvent: null,
+            onlineMain: null,
+            onlineDiff: null
+          },
+          pollTimer: null
+        });
+
+        function toLocalInput(isoUtc) {
+          if (!isoUtc) return "";
+          const d = new Date(isoUtc);
+          d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+          return d.toISOString().slice(0, 16);
+        }
+        function fromLocalInput(localVal) {
+          if (!localVal) return "";
+          return new Date(localVal).toISOString();
+        }
+        function fmt(v, digits = 2) {
+          if (v === null || v === undefined || Number.isNaN(Number(v))) return "-";
+          return Number(v).toFixed(digits);
+        }
+
+        async function fetchJson(path, options = {}) {
+          const resp = await fetch(`${serviceBase}${path}`, {
+            ...options,
+            headers: { "Content-Type": "application/json", ...(options.headers || {}) }
+          });
+          if (!resp.ok) {
+            const txt = await resp.text();
+            throw new Error(`HTTP ${resp.status}: ${txt}`);
+          }
+          return resp.json();
+        }
+
+        function initCharts() {
+          function make(id) {
+            const el = document.getElementById(id);
+            return el ? echarts.init(el) : null;
+          }
+          appState.charts.offlineMain = make("offlineMainChart");
+          appState.charts.offlineDiff = make("offlineDiffChart");
+          appState.charts.offlineEvent = make("offlineEventChart");
+          appState.charts.onlineMain = make("onlineMainChart");
+          appState.charts.onlineDiff = make("onlineDiffChart");
+          window.addEventListener("resize", () => {
+            Object.values(appState.charts).forEach((c) => c && c.resize());
+          });
+        }
+
+        function resizeCharts() {
+          Object.values(appState.charts).forEach((c) => c && c.resize());
+        }
+
+        function renderOfflineCharts() {
+          const raw = appState.offline.raw;
+          if (!raw) return;
+          const app = appState.offline.selectedApp || appState.appliances[0];
+          if (!app) return;
+          if (!appState.charts.offlineMain || !appState.charts.offlineDiff || !appState.charts.offlineEvent) return;
+          const ts = raw.series.timestamp_utc || [];
+          const trueArr = raw.series.true_w?.[app] || [];
+          const predArr = raw.series.pred_w?.[app] || [];
+          const diffArr = raw.series.diff_w?.[app] || predArr.map((v, i) => Number(v) - Number(trueArr[i] || 0));
+
+          appState.charts.offlineMain.setOption({
+            animation: false,
+            tooltip: { trigger: "axis" },
+            legend: { data: ["true", "pred"] },
+            grid: { left: 42, right: 16, top: 28, bottom: 36 },
+            xAxis: { type: "category", data: ts, axisLabel: { showMaxLabel: true } },
+            yAxis: { type: "value", name: "W" },
+            dataZoom: [{ type: "inside" }, { type: "slider" }],
+            series: [
+              { name: "true", type: "line", showSymbol: false, data: trueArr, lineStyle: { width: 1.8, color: "#1f7a42" } },
+              { name: "pred", type: "line", showSymbol: false, data: predArr, lineStyle: { width: 1.8, color: "#0f6577" } }
+            ]
+          }, true);
+
+          appState.charts.offlineDiff.setOption({
+            animation: false,
+            tooltip: { trigger: "axis" },
+            grid: { left: 42, right: 16, top: 20, bottom: 28 },
+            xAxis: { type: "category", data: ts, axisLabel: { show: false } },
+            yAxis: { type: "value", name: "W" },
+            dataZoom: [{ type: "inside" }],
+            series: [
+              { name: "diff", type: "line", showSymbol: false, data: diffArr, lineStyle: { width: 1.4, color: "#8a4f0a" } }
+            ]
+          }, true);
+
+          const ev = raw.events?.[app] || { true: [], pred: [] };
+          const trueMarks = (ev.true || []).map((e) => ({ xAxis: Number(e.index || 0), yAxis: 1, itemStyle: { color: e.type === "on" ? "#1f7a42" : "#a5620d" } }));
+          const predMarks = (ev.pred || []).map((e) => ({ xAxis: Number(e.index || 0), yAxis: 0, itemStyle: { color: e.type === "on" ? "#1f7a42" : "#a5620d" } }));
+          const eventIdx = [...trueMarks, ...predMarks].map((m) => Number(m.xAxis || 0)).filter((v) => Number.isFinite(v));
+          const fullCount = Number(raw.config?.point_count_full || 0);
+          let xMin = 0;
+          let xMax = Math.max(1, ts.length - 1);
+          if (eventIdx.length > 0) {
+            const minIdx = Math.min(...eventIdx);
+            const maxIdx = Math.max(...eventIdx);
+            const span = Math.max(1, maxIdx - minIdx);
+            const pad = Math.max(5, Math.round(span * 0.08));
+            xMin = Math.max(0, minIdx - pad);
+            xMax = maxIdx + pad;
+            if (fullCount > 1) {
+              xMax = Math.min(fullCount - 1, xMax);
+            }
+            if (xMax <= xMin) xMax = xMin + 1;
+          } else if (fullCount > 1) {
+            xMax = fullCount - 1;
+          }
+          appState.charts.offlineEvent.setOption({
+            animation: false,
+            tooltip: { trigger: "axis" },
+            grid: { left: 42, right: 16, top: 16, bottom: 24 },
+            xAxis: { type: "value", min: xMin, max: xMax, axisLabel: { formatter: "{value}s" } },
+            yAxis: { type: "category", data: ["pred", "true"] },
+            dataZoom: [{ type: "inside" }, { type: "slider" }],
+            series: [
+              { name: "true_events", type: "scatter", data: trueMarks.map((m) => [m.xAxis, 1]), symbolSize: 7, itemStyle: { color: "#1f7a42" } },
+              { name: "pred_events", type: "scatter", data: predMarks.map((m) => [m.xAxis, 0]), symbolSize: 7, itemStyle: { color: "#0f6577" } }
+            ]
+          }, true);
+        }
+
+        function renderOnlineCharts(status) {
+          const app = appState.online.selectedApp || appState.appliances[0];
+          if (!app || !status) return;
+          if (!appState.charts.onlineMain || !appState.charts.onlineDiff) return;
+          const ts = status.history?.timestamp_utc || [];
+          const trueArr = status.history?.true_w?.[app] || [];
+          const predArr = status.history?.pred_w?.[app] || [];
+          const diffArr = predArr.map((v, i) => Number(v) - Number(trueArr[i] || 0));
+          appState.charts.onlineMain.setOption({
+            animation: false,
+            tooltip: { trigger: "axis" },
+            legend: { data: ["true", "pred"] },
+            grid: { left: 42, right: 16, top: 28, bottom: 36 },
+            xAxis: { type: "category", data: ts, axisLabel: { show: false } },
+            yAxis: { type: "value", name: "W" },
+            dataZoom: [{ type: "inside" }],
+            series: [
+              { name: "true", type: "line", showSymbol: false, data: trueArr, lineStyle: { width: 1.6, color: "#1f7a42" } },
+              { name: "pred", type: "line", showSymbol: false, data: predArr, lineStyle: { width: 1.6, color: "#0f6577" } }
+            ]
+          }, true);
+          appState.charts.onlineDiff.setOption({
+            animation: false,
+            tooltip: { trigger: "axis" },
+            grid: { left: 42, right: 16, top: 20, bottom: 28 },
+            xAxis: { type: "category", data: ts, axisLabel: { show: false } },
+            yAxis: { type: "value", name: "W" },
+            series: [
+              { name: "diff", type: "line", showSymbol: false, data: diffArr, lineStyle: { width: 1.4, color: "#8a4f0a" } }
+            ]
+          }, true);
+        }
+
+        async function refreshMeta() {
+          try {
+            const meta = await fetchJson("/api/meta");
+            appState.appliances = meta.appliances || [];
+            appState.offline.presets = meta.offline_presets || meta.presets || [];
+            appState.online.presets = meta.online_presets || [];
+            if (!appState.offline.selectedPreset && appState.offline.presets.length) appState.offline.selectedPreset = appState.offline.presets[0].id;
+            if (!appState.online.selectedPreset && appState.online.presets.length) appState.online.selectedPreset = appState.online.presets[0].id;
+            if (!appState.offline.selectedApp && appState.appliances.length) appState.offline.selectedApp = appState.appliances[0];
+            if (!appState.online.selectedApp && appState.appliances.length) appState.online.selectedApp = appState.appliances[0];
+            if (!appState.offline.startLocal) appState.offline.startLocal = toLocalInput(meta.data_range?.start_utc);
+            if (!appState.offline.endLocal) appState.offline.endLocal = toLocalInput(meta.data_range?.end_utc);
+            if (!appState.online.startLocal) appState.online.startLocal = toLocalInput(meta.data_range?.start_utc);
+            appState.statusText = "Connected";
+            appState.statusColor = "#1f7a42";
+          } catch (err) {
+            appState.statusText = `Disconnected (${err.message})`;
+            appState.statusColor = "#8f2c2c";
+          }
+        }
+
+        function applyOfflinePreset() {
+          const p = appState.offline.presets.find((x) => x.id === appState.offline.selectedPreset);
+          if (!p) return;
+          appState.offline.startLocal = toLocalInput(p.start_utc);
+          appState.offline.endLocal = toLocalInput(p.end_utc);
+          const d = p.devices || [];
+          if (d.length) appState.offline.selectedApp = d[0];
+        }
+
+        function applyOnlinePreset() {
+          const p = appState.online.presets.find((x) => x.id === appState.online.selectedPreset);
+          if (!p) return;
+          appState.online.startLocal = toLocalInput(p.start_utc);
+          appState.online.endLocal = toLocalInput(p.end_utc || "");
+          const d = p.devices || [];
+          if (d.length) appState.online.selectedApp = d[0];
+        }
+
+        async function runOfflineInfer() {
+          appState.offline.error = "";
+          try {
+            const startUtc = fromLocalInput(appState.offline.startLocal);
+            const endUtc = fromLocalInput(appState.offline.endLocal);
+            const payload = {
+              start_utc: startUtc,
+              end_utc: endUtc,
+              event_tolerance_s: Number(appState.offline.eventTolS || 10),
+              target_points: Number(appState.offline.targetPoints || 1200)
+            };
+            const res = await fetchJson("/api/offline/infer", {
+              method: "POST",
+              body: JSON.stringify(payload)
+            });
+            appState.offline.raw = res;
+            appState.offline.metrics = {
+              mae_avg_w: res.metrics?.mae_avg_w,
+              rmse_avg_w: res.metrics?.rmse_avg_w,
+              mean_diff_avg_w: res.metrics?.mean_diff_avg_w,
+              event_f1_avg: res.metrics?.event?.f1_avg
+            };
+            renderOfflineCharts();
+          } catch (err) {
+            appState.offline.error = err.message;
+          }
+        }
+
+        async function startOnlineReplay() {
+          appState.online.error = "";
+          try {
+            const payload = {
+              start_utc: fromLocalInput(appState.online.startLocal) || null,
+              end_utc: fromLocalInput(appState.online.endLocal) || null,
+              speed: Number(appState.online.speed || 20),
+              max_rows: Number(appState.online.maxRows || 0)
+            };
+            await fetchJson("/api/online/start", { method: "POST", body: JSON.stringify(payload) });
+            pollOnlineStatus();
+          } catch (err) {
+            appState.online.error = err.message;
+          }
+        }
+
+        async function stopOnlineReplay() {
+          try {
+            await fetchJson("/api/online/stop", { method: "POST", body: "{}" });
+          } catch (err) {
+            appState.online.error = err.message;
+          }
+        }
+
+        async function pollOnlineStatus() {
+          try {
+            const st = await fetchJson("/api/online/status");
+            appState.online.running = !!st.running;
+            appState.online.sentRows = Number(st.sent_rows || 0);
+            appState.online.predCount = Number(st.latest?.pred_count || 0);
+            appState.online.metrics = st.metrics || {};
+            appState.online.trueEvents = (st.event_stream?.true || []).slice().reverse();
+            appState.online.predEvents = (st.event_stream?.pred || []).slice().reverse();
+            if (st.last_error) appState.online.error = st.last_error;
+            renderOnlineCharts(st);
+          } catch (err) {
+            appState.online.error = err.message;
+          }
+        }
+
+        const offlineEventRows = computed(() => {
+          const raw = appState.offline.raw;
+          const app = appState.offline.selectedApp;
+          if (!raw || !app) return [];
+          const p = raw.metrics?.per_appliance?.[app] || {};
+          const rows = [];
+          (p.event_on?.pairs || []).forEach((x) => rows.push(x));
+          (p.event_off?.pairs || []).forEach((x) => rows.push(x));
+          return rows;
+        });
+
+        const offlineEventHint = computed(() => {
+          const raw = appState.offline.raw;
+          const app = appState.offline.selectedApp;
+          if (!raw || !app) return "-";
+          const p = raw.metrics?.per_appliance?.[app] || {};
+          const on = p.event_on || {};
+          const off = p.event_off || {};
+          return `${app}: on_f1=${fmt(on.f1, 3)}, off_f1=${fmt(off.f1, 3)}, ` +
+            `mean_abs_delta=${fmt(p.event_mean_abs_delta_s, 2)}s, p95_abs_delta=${fmt(p.event_p95_abs_delta_s, 2)}s`;
+        });
+
+        watch(() => appState.offline.selectedApp, () => renderOfflineCharts());
+        watch(() => appState.online.selectedApp, () => pollOnlineStatus());
+        watch(() => appState.tab, async (tab) => {
+          await nextTick();
+          resizeCharts();
+          if (tab === "online") {
+            await pollOnlineStatus();
+          }
+        });
+
+        onMounted(async () => {
+          initCharts();
+          await refreshMeta();
+          if (appState.offline.presets.length) applyOfflinePreset();
+          if (appState.online.presets.length) applyOnlinePreset();
+          appState.pollTimer = setInterval(() => {
+            if (appState.tab === "online") pollOnlineStatus();
+          }, 1000);
+          await pollOnlineStatus();
+        });
+
+        onBeforeUnmount(() => {
+          if (appState.pollTimer) {
+            clearInterval(appState.pollTimer);
+            appState.pollTimer = null;
+          }
+          Object.values(appState.charts).forEach((c) => c && c.dispose());
+        });
+
+        return {
+          ...toRefs(appState),
+          fmt,
+          refreshMeta,
+          applyOfflinePreset,
+          applyOnlinePreset,
+          runOfflineInfer,
+          startOnlineReplay,
+          stopOnlineReplay,
+          pollOnlineStatus,
+          offlineEventRows,
+          offlineEventHint
+        };
+      }
+    }).mount("#app");
+  </script>
+</body>
+</html>

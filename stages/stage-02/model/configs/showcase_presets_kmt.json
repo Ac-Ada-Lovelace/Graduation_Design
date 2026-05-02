@@ -1,0 +1,90 @@
+{
+  "name": "kmt_showcase_presets_v2",
+  "timezone": "UTC",
+  "description": "Manually curated KMT showcase intervals (long/event-dense and model-friendly for demo).",
+  "offline_presets": [
+    {
+      "id": "kmt_showcase_01",
+      "label": "Showcase A (120m, dense-balanced)",
+      "start_utc": "2013-03-19T16:52:15Z",
+      "end_utc": "2013-03-19T19:03:57Z",
+      "minutes": 120,
+      "devices": ["kettle", "microwave", "toaster"],
+      "tags": ["manual", "event_dense", "balanced", "long"]
+    },
+    {
+      "id": "kmt_showcase_02",
+      "label": "Showcase B (90m, dense core)",
+      "start_utc": "2013-03-19T17:24:44Z",
+      "end_utc": "2013-03-19T19:03:57Z",
+      "minutes": 90,
+      "devices": ["kettle", "microwave", "toaster"],
+      "tags": ["manual", "event_dense", "core", "long"]
+    },
+    {
+      "id": "kmt_showcase_03",
+      "label": "Showcase C (90m, microwave-rich)",
+      "start_utc": "2013-03-22T07:49:11Z",
+      "end_utc": "2013-03-22T09:25:06Z",
+      "minutes": 90,
+      "devices": ["kettle", "microwave", "toaster"],
+      "tags": ["manual", "event_dense", "microwave_rich", "long"]
+    },
+    {
+      "id": "kmt_showcase_04",
+      "label": "Showcase D (90m, alternate day stable)",
+      "start_utc": "2013-03-23T16:43:48Z",
+      "end_utc": "2013-03-23T18:23:17Z",
+      "minutes": 90,
+      "devices": ["kettle", "microwave", "toaster"],
+      "tags": ["manual", "stable", "alternate_day", "long"]
+    },
+    {
+      "id": "kmt_showcase_05",
+      "label": "Showcase E (60m, compact dense)",
+      "start_utc": "2013-03-19T17:35:02Z",
+      "end_utc": "2013-03-19T18:42:14Z",
+      "minutes": 60,
+      "devices": ["kettle", "microwave", "toaster"],
+      "tags": ["manual", "event_dense", "compact", "high_fidelity"]
+    }
+  ],
+  "online_presets": [
+    {
+      "id": "kmt_online_01",
+      "label": "Online Dense Start A (Mar19 core)",
+      "start_utc": "2013-03-19T17:24:44Z",
+      "end_utc": "2013-03-19T18:24:44Z",
+      "devices": ["kettle", "microwave", "toaster"],
+      "speed_options": [1, 5, 20, 50],
+      "tags": ["manual", "event_dense", "balanced"]
+    },
+    {
+      "id": "kmt_online_02",
+      "label": "Online Dense Start B (Mar19 compact)",
+      "start_utc": "2013-03-19T18:14:43Z",
+      "end_utc": "2013-03-19T18:59:43Z",
+      "devices": ["kettle", "microwave", "toaster"],
+      "speed_options": [1, 5, 20, 50],
+      "tags": ["manual", "event_dense", "compact"]
+    },
+    {
+      "id": "kmt_online_03",
+      "label": "Online Dense Start C (Mar22 microwave)",
+      "start_utc": "2013-03-22T07:49:11Z",
+      "end_utc": "2013-03-22T08:34:11Z",
+      "devices": ["kettle", "microwave", "toaster"],
+      "speed_options": [1, 5, 20, 50],
+      "tags": ["manual", "event_dense", "microwave_rich"]
+    },
+    {
+      "id": "kmt_online_04",
+      "label": "Online Stable Start D (Mar23 alternate)",
+      "start_utc": "2013-03-23T16:43:48Z",
+      "end_utc": "2013-03-23T17:28:48Z",
+      "devices": ["kettle", "microwave", "toaster"],
+      "speed_options": [1, 5, 20, 50],
+      "tags": ["manual", "stable", "alternate_day"]
+    }
+  ]
+}
