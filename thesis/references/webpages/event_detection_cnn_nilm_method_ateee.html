@@ -1,0 +1,1660 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<!-- 使用 https 可周用些设置，实现http的兼容
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+ -->
+<title>基于事件检测与CNN模型的非侵入式负荷识别方法及实现</title>
+
+<!-- develop 必引内容，不可删除，不可改动 -->
+
+
+
+
+
+
+
+
+
+
+<link href="/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/develop/static/common/css/css.css">
+<link rel="stylesheet" href="/js/jqpagination/jqpagination.css" />
+<script src="/js/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/jquery/jquery.qrcode.min.js"></script>
+<script src="/develop/static/common/js/common_cn.js"></script>
+<script src="/develop/static/common/js/component_cn.js"></script>
+<script language="javascript" src="/js/store.js"></script>
+<script language="javascript" src="/develop/static/common/js/download_cn.js"></script>
+<script language="javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<link rel="stylesheet" href="/develop/static/common/bootstrap/js/font-awesome.min.css">
+
+<script>
+	$(document).ready(function(){
+		$("title").text($("title").text().replace(/<\/?[^>]*>/g,""));
+	});
+</script>
+
+
+
+
+
+<!--基本信息-->
+<link rel="canonical" href="https://ateee.iee.ac.cn/CN/10.12067/ATEEE2010034"/><!--文章url-->	
+<link rel="alternate" hreflang="en" href="https://ateee.iee.ac.cn/EN/10.12067/ATEEE2010034" /><!--文章英文页面地址-->
+
+<meta name="DOI" content="10.12067/ATEEE2010034"/><!--文章doi-->
+
+
+<meta name="description" content="非侵入式负荷识别是非侵入式负荷监测的一个重要任务。考虑到实际部署的成本问题，负荷识别的算法常常需要在计算能力与内存受限的设备上运行，因此本文提出了一种基于事件检测和卷积神经网络模型的负荷识别方法并在基于STM32微处理器的嵌入式系统上实现。首先引入带边距的滑动窗口，选取合适的特征值使用霍特林T2检验进行事件检测，对检测到的事件使用卷积神经网络模型进行分类从而实现负荷识别，对训练好的神经网络模型进行压缩后部署到嵌入式设备上，在Blued数据集上对压缩后的算法进行整体性能测试，取得了较好的结果。"/>
+
+<meta name="authors" content="凌家源， 彭勇刚"/><!--文章中文作者列表，用逗号分隔-->
+
+<meta name="keywords" content="非侵入式负荷识别, 事件检测, 卷积神经网络"/><!--文章关键词列表，用逗号分隔。去掉HTML标签-->
+
+<meta charset="UTF-8"/>
+<meta name="robots" content="index"/><!--搜索引擎-->
+<meta name="renderer" content="webkit"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><!--优先使用 IE 最新版本和 Chrome-->
+
+<!--移动端访问-->
+<!-- 
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=10, user-scalable=0"/>
+ --><!--H5设备控制-->
+<meta name="format-detection" content="telephone=no"/><!--页面手机号验证-->
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="基于事件检测与CNN模型的非侵入式负荷识别方法及实现"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="screen-orientation" content="portrait"/>
+<meta name="x5-orientation" content="portrait"/>
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<meta name="browsermode" content="application">
+<meta name="x5-page-mode" content="app">
+<meta name="msapplication-tap-highlight" content="no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Expires" content="0">
+
+<!--DC元数据-->
+<meta name="dc.relation.is" content="电工电能新技术"/><!-- 中文刊名 -->
+
+<meta name="dc.citation.volume" content="40"/>
+
+
+<meta name="dc.citation.issue" content="3"/>
+
+<meta name="dc.citation.spage" content="46"/><!--起始页-->
+<meta name="dc.citation.epage" content="54"/><!--结束页-->
+<meta name="dc.title" content="基于事件检测与CNN模型的非侵入式负荷识别方法及实现"/><!--完整中文题目-->
+<meta name="dc.source" content="电工电能新技术"/><!--完整刊名-->
+<meta name="dc.format" content="text/html"/>
+<meta name="dc.publisher" content=""/><!--编辑部名称-->
+
+
+
+<meta name="dc.date" content="2021-03-23"/><!--正式出版：刊出日期；最新录用：录用日期-->
+
+<meta name="dc.type" content=""/><!--文章类型-->
+<meta name="dc.language" content="Cn"/><!--语种-->
+<meta name="dc.copyright" content=""/><!--年 编辑部名称-->
+<meta name="dc.description" content="非侵入式负荷识别是非侵入式负荷监测的一个重要任务。考虑到实际部署的成本问题，负荷识别的算法常常需要在计算能力与内存受限的设备上运行，因此本文提出了一种基于事件检测和卷积神经网络模型的负荷识别方法并在基于STM32微处理器的嵌入式系统上实现。首先引入带边距的滑动窗口，选取合适的特征值使用霍特林T2检验进行事件检测，对检测到的事件使用卷积神经网络模型进行分类从而实现负荷识别，对训练好的神经网络模型进行压缩后部署到嵌入式设备上，在Blued数据集上对压缩后的算法进行整体性能测试，取得了较好的结果。"/><!--完整中文摘要-->
+
+<meta name="dc.identifier" content="doi:10.12067/ATEEE2010034"/><!--文章doi：必须带“doi:”-->
+
+<meta name="dc.relation.ispartof" content="电工电能新技术"/>
+
+
+
+<!--以下为文章关键词-->
+
+<meta name="dc.subject" content="非侵入式负荷识别"/>
+
+<meta name="dc.subject" content="事件检测"/>
+
+<meta name="dc.subject" content="卷积神经网络"/>
+
+
+
+<meta name="prism.issn" content="1003-3076"/><!--期刊印刷版ISSN-->
+
+
+
+<meta name="prism.publicationDate" content="2021-03-23"/><!--正式出版：刊出日期；最新录用：录用日期-->
+
+<meta name="prism.section" content=""/><!--文章类型-->
+
+<meta name="prism.volume" content="40">
+
+
+<meta name="prism.number" content="3"><!--期-->
+
+<meta name="prism.startingPage" content="46"/><!--起始页-->
+<meta name="prism.endingPage" content="54"/><!--结束页-->
+<meta name="prism.copyright" content=""/><!--年 编辑部名称-->
+<meta name="prism.url" content="https://ateee.iee.ac.cn/CN/10.12067/ATEEE2010034"/><!--文章URL-->
+
+<meta name="prism.doi" content="doi:10.12067/ATEEE2010034"/><!--文章doi：必须带“doi:”-->
+
+
+<!--引用管理器-->
+<meta name="citation_pdf_url" content="https://ateee.iee.ac.cn/CN/PDF/10.12067/ATEEE2010034"/>
+<meta name="citation_abstract_html_url" content="https://ateee.iee.ac.cn/CN/10.12067/ATEEE2010034" />
+<meta name="citation_fulltext_html_url" content="https://ateee.iee.ac.cn/CN/10.12067/ATEEE2010034"/><!--文章HTML页面地址-->
+<meta name="citation_journal_title" content="电工电能新技术" /><!--完整刊名-->
+<meta name="citation_publisher" content=""/><!--出版社名称-->
+<meta name="citation_issn" content="1003-3076"/><!--期刊ISSN-->
+<meta name="citation_title" content="基于事件检测与CNN模型的非侵入式负荷识别方法及实现"/><!--文章题目-->
+
+<meta name="citation_volume" content="40"/>
+
+
+<meta name="citation_issue" content="3"/>
+
+
+
+
+<meta name="citation_publication_date" content="2021/03/23"/><!--正式出版：刊出日期；最新录用：录用日期-->
+
+
+
+
+
+<meta name="citation_online_date" content="2021/03/23"/><!--正式出版：刊出日期；最新录用：录用日期-->
+
+<meta name="citation_firstpage" content="46"/>
+<meta name="citation_lastpage" content="54"/>
+<meta name="citation_article_type" content=""/><!--文章类型-->
+<meta name="citation_language" content="zh"/>
+<meta name="citation_doi" content="10.12067/ATEEE2010034"/>
+<meta name="citation_abstract" content="非侵入式负荷识别是非侵入式负荷监测的一个重要任务。考虑到实际部署的成本问题，负荷识别的算法常常需要在计算能力与内存受限的设备上运行，因此本文提出了一种基于事件检测和卷积神经网络模型的负荷识别方法并在基于STM32微处理器的嵌入式系统上实现。首先引入带边距的滑动窗口，选取合适的特征值使用霍特林T2检验进行事件检测，对检测到的事件使用卷积神经网络模型进行分类从而实现负荷识别，对训练好的神经网络模型进行压缩后部署到嵌入式设备上，在Blued数据集上对压缩后的算法进行整体性能测试，取得了较好的结果。"/><!--完整中文摘要-->
+<!--以下为文章关键词-->
+
+<meta name="citation_keywords" content="非侵入式负荷识别"/>
+
+<meta name="citation_keywords" content="事件检测"/>
+
+<meta name="citation_keywords" content="卷积神经网络"/>
+
+
+
+
+
+
+<meta name="citation_date" content="2021/03/23"/><!--正式出版：刊出日期；最新录用：录用日期-->
+
+
+
+
+
+<!--开放图谱协议-->
+<meta property="og:url" content="https://ateee.iee.ac.cn/CN/10.12067/ATEEE2010034"/><!--文章HTML页面地址-->
+<meta property="og:type" content="Article"/><!--固定为 Article-->
+<meta property="og:site_name" content="电工电能新技术"/><!--刊名-->
+<meta property="og:title" content="基于事件检测与CNN模型的非侵入式负荷识别方法及实现"/><!--文章题目-->
+<meta property="og:description" content="非侵入式负荷识别是非侵入式负荷监测的一个重要任务。考虑到实际部署的成本问题，负荷识别的算法常常需要在计算能力与内存受限的设备上运行，因此本文提出了一种基于事件检测和卷积神经网络模型的负荷识别方法并在基于STM32微处理器的嵌入式系统上实现。首先引入带边距的滑动窗口，选取合适的特征值使用霍特林T2检验进行事件检测，对检测到的事件使用卷积神经网络模型进行分类从而实现负荷识别，对训练好的神经网络模型进行压缩后部署到嵌入式设备上，在Blued数据集上对压缩后的算法进行整体性能测试，取得了较好的结果。"/><!--摘要-->
+
+
+
+
+
+<meta name="article_references" content="凌家源， 彭勇刚. 基于事件检测与CNN模型的非侵入式负荷识别方法及实现. 电工电能新技术. 2021, 40 (3): 46-54. https://doi.org/10.12067/ATEEE2010034" />
+
+
+<link rel="stylesheet" href="/custom/jsp/CN/article/showArticle_jsp/showArticle_cn.css" />
+<script type="text/javascript" src="/js/jquery/jquery.nicescroll.js"></script>
+<script type="text/javascript" src="/js/jquery/jquery.webui-popover.js"></script>
+<script src="/develop/static/common/js/mag-vue/mag-vue.js"></script>
+<script type="text/javascript" src="/develop/jsp/CN/article/showArticle_jsp/showArticle_cn.js"></script>
+
+<style>
+template{
+	display:none;
+}
+.mag-rich-xref-fn {
+    cursor: pointer;
+}
+</style>
+
+<script type="text/javascript">
+//长视频
+$(document).ready(function(){
+	if($("#showLongArticleVideo") && $("#showLongArticleVideo").length && $("#showLongArticleVideo").length>0){
+		mag_ajax_update({
+			ele_id:'showLongArticleVideo',
+			url:mag_currentQikanUrl() + "/CN/article/showLongArticleVideo.do?id="+$("#articleId").val()
+		});
+	}
+});
+
+	$(document).ready(function(){
+		window.metaData = {"journal":{"issn":"1003-3076","qiKanMingCheng_CN":"电工电能新技术","id":1,"qiKanMingCheng_EN":"Advanced Technology of Electrical Engineering and Energy"},"affList_en":["College of Electrical Engineering, Zhejiang University, Hangzhou 310027, China"],"fundList_cn":["国家重点研发计划项目（2020YFB0906002）、 国家自然科学基金项目（51877188）、 浙江省重点研发计划项目（2019C01150）"],"affList_cn":["浙江大学电气工程学院， 浙江 杭州 310027"],"article":{"keywordList_cn":["非侵入式负荷识别"," 事件检测"," 卷积神经网络"],"juan":"40","zhaiyao_cn":"非侵入式负荷识别是非侵入式负荷监测的一个重要任务。考虑到实际部署的成本问题，负荷识别的算法常常需要在计算能力与内存受限的设备上运行，因此本文提出了一种基于事件检测和卷积神经网络模型的负荷识别方法并在基于STM32微处理器的嵌入式系统上实现。首先引入带边距的滑动窗口，选取合适的特征值使用霍特林T2检验进行事件检测，对检测到的事件使用卷积神经网络模型进行分类从而实现负荷识别，对训练好的神经网络模型进行压缩后部署到嵌入式设备上，在Blued数据集上对压缩后的算法进行整体性能测试，取得了较好的结果。","endNoteUrl_en":"https://ateee.iee.ac.cn/EN/article/getTxtFile.do?fileType=EndNote&id=2327","reference":"［1］ Hart G. Nonintrusive appliance load monitoring［J］. Proceedings of the IEEE, 1992, 80(12):1870-1891.<br>\r\n［2］ Froehlich J, Larson E, Gupta S, et al. Disaggregated end-use energy sensing for the smart grid［J］. IEEE Pervasive Computing, 2010, 10(1):28-39.<br>\r\n［3］ 程祥，李林芝，吴浩，等（Cheng Xiang, Li Linzhi, Wu Hao, et al.）．非侵入式负荷监测与分解研究综述(A survey of the research on non-intrusive load monitoring and disaggregation)［J］.电网技术(Power System Technology)，2016，40(10)：3108-3117．<br>\r\n［4］ Anderson K, Berges M, Ocneanu A, et al. Event detection for non intrusive load monitoring［A］. IECON 2012-38th Annual Conference on IEEE Industrial Electronics Society［C］. Montreal, Canada, 20123312-3317.<br>\r\n［5］ 肖江，Auger F，荆朝霞，等(Xiao Jiang, Auger F, Jing Zhaoxia, et al.)．基于贝叶斯信息准则的非侵入式负荷事件检测算法(Non-intrusive load event detection algorithm based on Bayesian information criterion)［J］．电力系统保护与控制(Power System Protection and Control)，2018，46(22)：8-14．<br>\r\n［6］ 张露,Auger F，荆朝霞,等(Zhang Lu, Auger F, Jing Zhaoxia, et al.). 基于非侵入式的事件检测方法统计评估(Statistical assessment of abrupt change detection for NILM)［J］.电测与仪表(Electrical Measurement &amp; Instrumentation),2020, 57(1):106-112,120.<br>\r\n［7］ Houidi S, Auger F, Ben A S H, et al. Multivariate event detection methods for non-intrusive load monitoring in smart homes and residential buildings［J］. Energy and Buildings, 2020, 208(Feb.):1096241-10962414.<br>\r\n［8］ Kelly J, Knottenbelt W. Neural NILM: Deep neural networks applied to energy disaggregation［A］. 2nd ACM International Conference on Embedded System For Energy-Efficient Built Environments［C］. Seoul, South Korea, 2015.<br>\r\n［9］ 刘恒勇，史帅彬，徐旭辉，等(Liu Hengyong, Shi Shuaibin, Xu Xuhui, et al.).一种关联RNN模型的非侵入式负荷辨识方法(A non-intrusive load identification method based on RNN model)［J］.电力系统保护与控制(Power System Protection and Control)，2019，47(13)：162-170.<br>\r\n［10］ 何恒靖，王灏，肖勇，等(He Hengjing, Wang Hao, Xiao Yong, et al.)．基于Bi-LSTM算法的非侵入式负荷监测模型(Non-intrusive load monitoring model based on Bi-ISTM algorithm)［J］.南方电网技术(Southern Power System Technology)，2019，13(2)：20-26．<br>\r\n［11］ Barsim K S, Wiewel F, Yang B. On the feasibility of generic deep disaggregation for single-load extraction［A］. The 4rd International Workshop on Non-intrusive Load Monitoring［C］. Austin, America, 2018.<br>\r\n［12］ Azzini H, Torquato R, Silva L C P. Event detection methods for nonintrusive load monitoring［A］. 2014 IEEE Power &amp; Energy Society General Meeting［C］. Washington, America, 20141-5.<br>\r\n［13］ Anderson K, Ocneanu A, Benitez D, et al. BLUED: A fully labeled public dataset for event-based non-intrusive load monitoring research［A］. Proceedings of the 2nd KDD Workshop on Data Mining Applications in Sustainability (SustKDD)［C］. Beijing, China, 2012 1-5.<br>\r\n［14］ Batra N, Kelly J, Parson O, et al. NILMTK: An open source toolkit for non-intrusive load monitoring［A］. 5th International Conference on Future Energy Systems(ACM e-Energy)［C］. Cambridge, UK, 2014. 265-276.<br>\r\n［15］ IEEE standard 1459-2000. IEEE standard definition for the measurement of electric power quantities under sinusoidal, nonsinusoidal, balanced and unbalanced conditions［S］.<br>\r\n［16］ Houidi S, Auger F, Fourer D, et al. Relevant feature selection for home appliances recognition［A］. Electrimacs 2017［C］. Toulouse, France, 2017.","bibtexUrl_cn":"https://ateee.iee.ac.cn/CN/article/getTxtFile.do?fileType=BibTeX&id=2327","abstractUrl_en":"https://ateee.iee.ac.cn/EN/10.12067/ATEEE2010034","qi":"3","id":2327,"nian":2021,"bianHao":"2021-3-46","zuoZheEn_L":"LING Jia-yuan, PENG Yong-gang","juanUrl_en":"https://ateee.iee.ac.cn/EN/Y2021","qiShiYe":"46","received":"2020-10-25","qiUrl_cn":"https://ateee.iee.ac.cn/CN/Y2021/V40/I3","lanMu_cn":"新技术应用","pdfSize":"1364","zuoZhe_CN":"凌家源， 彭勇刚","risUrl_cn":"https://ateee.iee.ac.cn/CN/article/getTxtFile.do?fileType=Ris&id=2327","title_cn":"基于事件检测与CNN模型的非侵入式负荷识别方法及实现","doi":"10.12067/ATEEE2010034","jieShuYe":"54","keywordList_en":["non-intrusive load identification"," event detection"," convolutional neural network"],"endNoteUrl_cn":"https://ateee.iee.ac.cn/CN/article/getTxtFile.do?fileType=EndNote&id=2327","zhaiyao_en":"Load identification is one of the important tasks of non-intrusive load monitoring(NILM). Considering the cost of deployment, load identification algorithms need to run on devices with limited computing power and memory. This paper proposes an identification method based on event detection and Convolutional Neural Network(CNN). The method is implemented on an embedded device based on STM32 MCU. Sliding Window with Margins method and Hotelling T2 test are used for event detection. Then the detected events are identified by the CNN models. The trained CNN models have to be compressed and then deployed to the embedded device. The performance of the overall algorithm is tested on the Blued dataset and satisfied results are obtained.","bibtexUrl_en":"https://ateee.iee.ac.cn/EN/article/getTxtFile.do?fileType=BibTeX&id=2327","abstractUrl_cn":"https://ateee.iee.ac.cn/CN/10.12067/ATEEE2010034","zuoZheCn_L":"凌家源， 彭勇刚","juanUrl_cn":"https://ateee.iee.ac.cn/CN/Y2021","lanMu_en":"New Technolog Application","qiUrl_en":"https://ateee.iee.ac.cn/EN/Y2021/V40/I3","zuoZhe_EN":"LING Jia-yuan, PENG Yong-gang","risUrl_en":"https://ateee.iee.ac.cn/EN/article/getTxtFile.do?fileType=Ris&id=2327","title_en":"Implementation of a non-intrusive load identification method based on event detection and CNN model","hasPdf":"true"},"authorNotes_cn":["凌家源（1996-）， 男， 广东籍， 硕士研究生， 研究方向为非侵入式负荷监测；<br> 彭勇刚（1978-）， 男， 湖北籍， 教授， 博士， 研究方向为分布式发电、 智能电网等（通讯作者）。"]};
+		
+		if(window.metaData && (!window.metaData.authorNotesCommon_cn && !window.metaData.authorNotesCorresp_cn && window.metaData.authorNotes_cn)){
+			window.metaData.authorNotesCommon_cn = window.metaData.authorNotes_cn;
+		}
+		if(window.metaData && (!window.metaData.authorNotesCommon_en && !window.metaData.authorNotesCorresp_en && window.metaData.authorNotes_en)){
+			window.metaData.authorNotesCommon_en = window.metaData.authorNotes_en;
+		}
+		
+		var _nlmdtdXml = $("#article_nlmdtdXml").val();
+		var magDir = _nlmdtdXml.replace(/\/[^\/]+$/,'');
+		window.metaData.magDir = magDir;
+		new mag_vue({
+			  el: '#metaVue',
+			  //dataUrl: mag_currentQikanUrl() + '/EN/article/getRichHtmlJson.do?articleId='+$("#articleId").val(),
+			  data:window.metaData,
+			  loading:true,
+			  doTextFun:function(text){
+				  return doDataJsonText(text);
+			  },
+			  doAfterFun:function(selector,jsonData){doMagVueAfter(selector,jsonData);}
+		});
+		
+		var pars = {attachType:'PDF',id:$("#articleId").val(),json:true};
+		jQuery.post($("#mag-common-contextPath").val()+"/CN/article/showArticleFile.do?" + new Date().getTime(), pars, function(data){
+			var json=null;
+			if(data.match(/^\[json\].*/g)){
+				json=eval("("+data.replace(/^\[json\]/g,"")+")");
+			}
+			if(json && json.status == 1){
+				//有权限
+			}else{
+				//无权限
+				$("#no-access-div").show();
+			}
+		});
+		mag_ajax({
+			url:mag_currentQikanUrl() + '/CN/article/getRichHtmlJson.do',
+			data:{articleId:$("#articleId").val(),token:'f6dd2d0780ed42fdb6d1fbfb7ca2c74e',referer:document.referrer},
+			dataType:"json",
+			async:"false",
+			success:function(json){
+				if(json.richHtmlJson && json.richHtmlJson.article){
+					if(json.trans){
+						var _nlmdtdXmlCN = $("#article_nlmdtdXmlCN").val();
+						var magDirCN = _nlmdtdXmlCN.replace(/\/[^\/]+$/,'');
+						json.richHtmlJson.magDir=magDirCN;
+					}else{
+						json.richHtmlJson.magDir=magDir;
+					}
+					new mag_vue({
+						  el: '#bodyVue',
+						  data:json.richHtmlJson,
+						  doTextFun:function(text){
+							  return doDataJsonText(text);
+						  },
+						  doAfterFun:function(selector,jsonData){doMagVueAfter(selector,jsonData);}
+					});
+				}
+			}
+		});
+		
+		//altmetric
+		if($.trim($("#article_doi").val())!=''){
+			$.ajax({
+				url:'https://api.altmetric.com/v1/doi/'+$.trim($("#article_doi").val())+'?callback=altmetric_callback',
+				//url:'https://api.altmetric.com/v1/doi/10.1007/s13238-016-0264-7?callback=altmetric_callback',
+				dataType:'jsonp'
+			});
+		}
+		
+		mag_rich_menu(jQuery);
+		
+		$(function(){
+			 $('#autoMenu').autoMenu();
+		})
+		$("#autoMenu").niceScroll({
+			cursorcolor: "#ccc", //滚动条的颜色
+			cursoropacitymax: 0, //滚动条的透明度，从0-1   
+			touchbehavior: false, //使光标拖动滚动像在台式电脑触摸设备 true滚动条拖动不可用  
+			cursorwidth: "6px", //滚动条的宽度  单位默认px 
+			cursorborder: "0", // 游标边框css定义    
+			cursorborderradius: "3px", //滚动条两头的圆角   
+			autohidemode: true, //是否隐藏滚动条  true的时候默认不显示滚动条，当鼠标经过的时候显示滚动条   
+			zindex: "auto", //给滚动条设置z-index值    
+			railvalign:'defaul',
+			railpadding: {
+				top: 0,
+				right: -6,
+				left: 0,
+				bottom: 0
+			}, //滚动条的位置
+		});
+		window.autoMenuFlag=true;
+		
+		$("#relatedArticles").niceScroll({
+			cursorcolor: "#ccc", //滚动条的颜色
+			cursoropacitymax: 0, //滚动条的透明度，从0-1   
+			touchbehavior: false, //使光标拖动滚动像在台式电脑触摸设备 true滚动条拖动不可用  
+			cursorwidth: "6px", //滚动条的宽度  单位默认px 
+			cursorborder: "0", // 游标边框css定义    
+			cursorborderradius: "3px", //滚动条两头的圆角   
+			autohidemode: true, //是否隐藏滚动条  true的时候默认不显示滚动条，当鼠标经过的时候显示滚动条   
+			zindex: "auto", //给滚动条设置z-index值    
+			railvalign:'defaul',
+			railpadding: {
+				top: 0,
+				right: -6,
+				left: 0,
+				bottom: 0
+			}, //滚动条的位置
+		});
+		
+		//公式序号 居右
+		jQuery(".mag-xml-disp-formula").each(function() {
+			var _this = jQuery(this);
+			var _label= _this.children("label");
+			if(typeof(_label.html())!="undefined"){
+				_this.children("label").remove();
+				_this.wrap("<div style='overflow:hidden;text-align: center;align-items:center;display:-webkit-flex;'><div style='float:left;text-align:center;width:90%;'></div></div>");
+				_this.parent().parent().append("<span style='width:10%;text-align:right;'>"+_label.html()+"</span>");
+			}
+		});
+		
+		$('body').click(function(){
+			$('.daochu_div').hide();
+			$('.qipao').hide();
+		})
+		$('.qipao').click(function(event){
+			event.stopPropagation();
+		})
+		
+		/*参考文献显示隐藏*/
+		$('.biaotijiantoush1').click(function(event){
+			if($(this).attr('class')=='glyphicon glyphicon-triangle-top biaotijiantoush biaotijiantoush1'){
+				$(this).parents('.mag_main_zhengwen_left_div_ckwx_table_benwenyiny').next('.mag_main_zhengwen_left_div_ckwx_table_ckwx_xiangqing').stop().slideUp();
+				$(this).attr('class','glyphicon glyphicon-triangle-bottom biaotijiantoush biaotijiantoush1');
+			}else if($(this).attr('class')=='glyphicon glyphicon-triangle-bottom biaotijiantoush biaotijiantoush1'){
+				$(this).parents('.mag_main_zhengwen_left_div_ckwx_table_benwenyiny').next('.mag_main_zhengwen_left_div_ckwx_table_ckwx_xiangqing').stop().slideDown();
+				$(this).attr('class','glyphicon glyphicon-triangle-top biaotijiantoush biaotijiantoush1');
+			}
+			event.stopPropagation();
+		});
+		
+		//加载补充材料
+		mag_ajax_update({
+			ele_id:'showArticle_suppls',
+			url:mag_currentQikanUrl() + '/CN/article/showArticleSuppls.do',
+			data:{articleId:$("#articleId").val()}
+		});
+		
+		//加载专题
+		mag_ajax_update({
+			ele_id:'showArticle_subjects',
+			url:mag_currentQikanUrl() + '/CN/subject/showSubjectListByArticle.do',
+			data:{articleId:$("#articleId").val(),forwardJsp:'showArticle'}
+		});
+		
+		//渲染公式
+		mag_mathJax();
+		
+	});
+	
+	function altmetric_callback(json){
+		if(json && json.score){
+			if(json.score - parseInt(json.score) > 0){
+				$("#altmetric-score").html(parseInt(json.score)+1);
+			}else{
+				$("#altmetric-score").html(parseInt(json.score));
+			}
+			$(".main_content_center_right_duoweidu_div").css("width","25%");
+			$("#altmetric-a").show();
+			$("#altmetric-a").attr("href",json.details_url);
+		}
+	}
+	
+	function richClickAuthor(name){
+		var searchSQL = "((("+mag_advSearchValReplace(name)+"[Author]) AND 1J[Journal]) AND year[Order])";
+		mag_request({url:mag_currentQikanUrl() + '/CN/searchresult',data:{searchSQL:searchSQL}});
+	}
+	
+	function richClickKeyword(keyword){
+		var searchSQL = "((("+mag_advSearchValReplace(keyword)+"[Keyword]) AND 1J[Journal]) AND year[Order])";
+		mag_request({url:mag_currentQikanUrl() + '/CN/searchresult',data:{searchSQL:searchSQL}});
+	}
+	
+	function mag_share(){
+		$("#bShare_more_a").click();
+	}
+	
+	function loadRelatedArticles(){
+		if($("#showRelatedArticles") && $("#showRelatedArticles").length>0){
+			//加载过了
+		}else{
+			mag_loading();
+			mag_ajax_update({
+				ele_id:'relatedArticles-content',
+				url:mag_currentQikanUrl() + '/CN/article/relatedArticle.do',
+				data:{id:$("#articleId").val(), forwardJsp:'showArticle'},
+				complete:function(){
+					mag_layer_close();
+				}
+			});
+		}
+	}
+	
+	function showMetrics(){
+		mag_window_location(mag_currentQikanUrl() + '/CN/metrics/'+$("#articleId").val());
+	}
+	
+	function piaofuFn(a,fnId){
+		var content='<div>'+$("#mag-rich-fn-"+fnId).html()+'</div>';
+		piaofu(a,content);
+	}
+	
+	function clickFigXref(a,figId){
+		if(figId!=''){
+			$("[mag-fig-id='"+figId+"']")[0].scrollIntoView();
+		}
+	}
+	
+	function clickTabXref(a,tabId){
+		if(tabId!=''){
+			document.getElementById(tabId).scrollIntoView();
+		}
+	}
+	
+	function huoqukuanduimg(){
+		//
+	}
+	
+	function doDataJsonText(text){
+		var str = text;
+		//var _nlmdtdXml = $("#article_nlmdtdXml").val();
+		//var magDir = _nlmdtdXml.replace(/\/[^\/]+$/,'');
+		
+		str = str.replace(/<img src="\/images\/email.png"/g, "<img src=\"" + mag_currentQikanUrl() + "/images/email.png\"");
+		str = str.replace(/<img src="\/images\/orcid.png"/g, "<img src=\"" + mag_currentQikanUrl() + "/images/orcid.png\"");
+		str = str.replace(/ src="\/fileup\/inline_graphic\//g, " src=\"" + mag_currentQikanUrl() + "/fileup/inline_graphic/");
+		
+		return str;
+	}
+	
+	function doMagVueAfter(selector,jsonData){
+		//var _nlmdtdXml = $("#article_nlmdtdXml").val();
+		//var magDir = _nlmdtdXml.replace(/\/[^\/]+$/,'');
+		var magDir = jsonData.magDir;
+		//处理fig
+		$(selector + " .mag-rich-fig[magid]").each(function(){
+			var magId = $(this).attr("magid");
+			for(var j=0;j<jsonData.figList.length;j++){
+				var fig = jsonData.figList[j];
+				if(fig.magId == magId){
+					$(this).html("");
+					$(this).attr("mag-fig-id",fig.id);
+					$(this).attr("class","mag_fig_div main_content_center_left_zhengwen_bao_fig");
+					var ss = "";
+					ss += "<div class='mag_fig_img main_content_center_left_zhengwen_bao_fig_img_bap' id='mag_fig_img_"+magId+"'>";
+					ss += "<img src='"+mag_currentQikanUrl()+"/"+magDir+"/"+fig.thumbnailUrl+"' onmouseover='huoqukuanduimg(this)' onclick='showimg(this)' class='main_content_center_left_zhengwen_bao_fig_img'/>";
+					ss += "</div>";
+					
+					var shuomingTitle = "";
+					var shuomingContent = '';
+					if(fig.titleCn && fig.titleCn!=''){
+						shuomingTitle = fig.titleCn;
+						if(fig.titleContentCn && fig.titleContentCn!=''){
+							shuomingContent += fig.titleContentCn;
+						}
+					}
+					if(shuomingTitle==''){
+						if(fig.titleEn && fig.titleEn!=''){
+							shuomingTitle = fig.titleEn;
+						}
+						if(fig.titleContentEn && fig.titleContentEn!=''){
+							shuomingContent += fig.titleContentEn;
+						}
+					}else{
+						if(fig.titleEn && fig.titleEn!=''){
+							shuomingContent += "<p>"+fig.titleEn+"</p>";
+						}
+						if(fig.titleContentEn && fig.titleContentEn!=''){
+							shuomingContent += fig.titleContentEn;
+						}
+					}
+					ss += '<div class="mag_main_zhengwen_left_div_img_shuoming main_content_center_left_zhengwen_bao_fig_shuoming"><table class="mag-rich-fig-shuoming-table"><tbody><tr class="mag-rich-fig-shuoming-tr"><td class="mag-rich-fig-shuoming-td"><h5 class="mag_nav_daohang cas_nav_daohang"><strong>'+shuomingTitle+'</strong></h5>';
+					if(shuomingContent!=''){
+						ss += shuomingContent;
+					}
+					ss += '</td></tr></tbody></table></div>';
+					
+					ss += '<p class="new_full_rich_table_shuoming_caozuo"><a href="'+mag_currentQikanUrl()+"/"+magDir+"/"+fig.figUrl+'" target="_blank">Full size</a><span style="color: #c5c6c7;padding: 0px 10px;">|</span><a href="'+mag_currentQikanUrl()+"/"+magDir+"/"+fig.pptUrl+'">PPT slide</a></p>';
+					
+					$(this).html(ss);
+					
+					break;
+				}
+			}
+		});
+		
+		//处理表格
+		$(selector + " .mag_main_table[magid]").each(function(){
+			var magId = $(this).attr("magid");
+			for(var i=0;i<jsonData.tabList.length;i++){
+				var tab = jsonData.tabList[i];
+				if(tab.magId == magId){
+					$(this).html("");
+					var ss = '<div class="mag_main_table_title">';
+					
+					ss += '<table class="mag-rich-table-title-tab"><tbody><tr class="mag-rich-table-title-tr"><td class="mag-rich-table-title-td">';
+					
+					var shuomingTitle = "";
+					var shuomingContent = '';
+					if(tab.titleCn && tab.titleCn!=''){
+						shuomingTitle = tab.titleCn;
+						if(tab.titleContentCn && tab.titleContentCn!=''){
+							shuomingContent += fig.titleContentCn;
+						}
+					}
+					if(shuomingTitle==''){
+						if(tab.titleEn && tab.titleEn!=''){
+							shuomingTitle = tab.titleEn;
+						}
+						if(tab.titleContentEn && tab.titleContentEn!=''){
+							shuomingContent += tab.titleContentEn;
+						}
+					}else{
+						if(tab.titleEn && tab.titleEn!=''){
+							shuomingContent += "<p>"+tab.titleEn+"</p>";
+						}
+						if(tab.titleContentEn && tab.titleContentEn!=''){
+							shuomingContent += tab.titleContentEn;
+						}
+					}
+					
+					ss += '<h6 class="mag_nav_daohang" id="25"><strong>'+shuomingTitle+'</strong></h6>';
+					if(shuomingContent!=''){
+						ss += shuomingContent;
+					}
+					ss += '</td></tr></tbody></table>';
+					
+					ss += '</div>';
+					
+					if(tab.table != ''){
+						ss += '<div class="table-responsive mag_table_div">';
+						ss += tab.table;
+						ss += '</div>';
+					}
+					
+					if(tab.footFnList && tab.footFnList.length>0){
+						ss += '<div class="mag_main_zhengwen_left_div_tab_shuoming"><table class="mag-rich-table-fn-tab">';
+						for(var j=0;j<tab.footFnList.length;j++){
+							var fn = tab.footFnList[j];
+							ss += '<tr><td valign="top">';
+							if(fn.label && fn.label!=''){
+								ss += fn.label;
+							}
+							ss += '</td>';
+							ss += '<td valign="top">';
+							if(fn.pList && fn.pList.length>0){
+								for(var k=0;k<fn.pList.length;k++){
+									ss += fn.pList[k];
+								}
+							}
+							ss += '</td>';
+							ss += '</tr>';
+						}
+						ss += '</table></div>';
+					}
+					
+					$(this).html(ss);
+					
+					break;
+				}
+			}
+		});
+		
+		//img .mag_rich_graphic
+		$(selector + " img.mag_rich_graphic").each(function(){
+			 $(this).attr("src",mag_currentQikanUrl()+"/"+magDir+"/"+$(this).attr("src"));
+		});
+		
+		//video .mag_shipin
+		$(selector + " video.mag_shipin").each(function(){
+			 $(this).attr("src",mag_currentQikanUrl()+"/"+magDir+"/"+$(this).attr("src"));
+			 if($(this).attr("poster") && $.trim($(this).attr("poster"))!=''){
+				 $(this).attr("poster",mag_currentQikanUrl()+"/"+magDir+"/"+$(this).attr("poster"));
+			 }
+		});
+		
+		//a .mag_body_media_a
+		$(selector + " a.mag_body_media_a").each(function(){
+			 $(this).attr("href",mag_currentQikanUrl()+"/"+magDir+"/"+$(this).attr("href"));
+		});
+		
+	}
+	
+</script>
+
+<!-- develop end -->
+
+<!--custom 必引内容，网站设计维护的js、css等，不可删除，不可改动-->
+
+<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!--顶部快速导航下拉导航菜单特效css-->
+<link rel="stylesheet" href="https://ateee.iee.ac.cn/images/1003-3076/css/bootsnav.css">
+<!--网站css-->
+<link rel="stylesheet" href="https://ateee.iee.ac.cn/images/1003-3076/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://ateee.iee.ac.cn/images/1003-3076/css/css.css">
+<script src="https://ateee.iee.ac.cn/images/1003-3076/js/indexjs.js"></script>
+
+
+</head>
+<body id="metaVue">
+
+<!-- develop 必引内容，不可删除，不可改动 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<input type="hidden" id="mag-common-contextPath" value=""/>
+
+<div id="mag-component-store-div" style="display:none;"></div>
+			
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="magModal" tabindex="-1" role="dialog" data-keyboard=false data-backdrop='static' aria-labelledby="magModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button buttonGroup="0" type="button"  class="close"  aria-hidden="true" onclick="mag_layer_close();">
+					&times;
+				</button>
+				<h4 class="modal-title" id="magModalLabel">
+					模态框（Modal）标题
+				</h4>
+			</div>
+			<div class="modal-body" id="mag-modal-body" style="overflow:auto;">
+				在这里添加一些文本
+			</div>
+			<div id="mag-layer-button-div" class="modal-footer">
+				<button buttonGroup="1" type="button"  class="btn btn-default"  onclick="mag_layer_close();">关闭
+				</button>
+				<button buttonGroup="2" type="button"  class="btn btn-default"  onclick="mag_layer_close();">关闭
+				</button>
+				<button buttonGroup="2" type="button" class="btn btn-primary" onclick="mag_submit()" id="mag_layer_submit_button_2">
+					提交更改
+				</button>
+				<button buttonGroup="3" type="button"  class="btn btn-default"  onclick="mag_layer_close();">取消
+				</button>
+				<button buttonGroup="3" type="button" class="btn btn-primary" onclick="mag_submit()" id="mag_layer_submit_button_3">
+					确定并提交
+				</button>
+				
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+<div id="magModal_2" style="display:none;position:fixed;left:0px;top:0px;right:0px;bottom:0px;z-index:1060">
+	<div class="modal-dialog" style="margin-top:60px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button buttonGroup="0" type="button" id="mag-madal-close_bt_2"  class="close"  aria-hidden="true" onclick="mag_layer_close_2();">
+					&times;
+				</button>
+				<h4 class="modal-title" id="magModalLabel_2">
+					模态框（Modal）标题
+				</h4>
+			</div>
+			<div id="modal-body_2" class="modal-body"></div>
+		</div>
+	</div>
+</div>
+
+<!-- 模态框-Tab -->
+<div class="modal fade" id="magTabModal" tabindex="-1" role="dialog" data-keyboard=false data-backdrop='static' aria-labelledby="magTabModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header" style="border-bottom:0px;padding:15px 0px;">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding-right:15px;">
+					&times;
+				</button>
+				
+<ul id="magTab" class="nav nav-tabs">
+
+</ul>
+			</div>
+			<div class="modal-body">
+				
+<div id="magTabContent" class="tab-content">
+
+</div>
+			</div>
+			<div id="mag-tablayer-button-div" class="modal-footer">
+				
+			</div>
+			
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+
+
+<div style="display:none;">
+	<iframe id="mag_sendLongReq_iframe" name="mag_sendLongReq_iframe"></iframe>
+	<iframe id="mag_cma_sso_login_iframe" name="mag_cma_sso_login_iframe"></iframe>
+</div>
+<input type="hidden" id="mag_cma_sso_authorizeUrl" value=""/>
+		
+
+<div style="display:none;">
+<iframe src="https://ateee.iee.ac.cn/EN/article/updateBrowsCishu.do?articleid=2327&token=34a6bf9699044f4d9d50ffe6c46e736e&referer=" height=0 scrolling=no border=0 frameborder=0 allowtransparency="true"></iframe>
+</div>
+
+<input type="hidden" id="article_nlmdtdXml" value=""/>
+<input type="hidden" id="article_nlmdtdXmlCN" value=""/>
+<input type="hidden" id="articleId" value="2327"/>
+<input type="hidden" id="article_doi" value="10.12067/ATEEE2010034"/>
+
+<div class="qipao">
+			<img src="/develop/static/common/images/1.png" class="jiantou" alt="">
+			<div class="qipao-content">
+				
+		</div>
+</div>
+
+<!--Export弹出-->
+<div id="export-citation-div" class="" style="display:none;">
+	<form id="export-citation-form" action="https://ateee.iee.ac.cn/CN/article/exportCitation.do" method="post">
+	<input type="hidden" id="export-citation-form-ids" name="articleIds" value="2327" />
+	<div class="panel panel-warning" style="color:gray;">
+		下载引用文件后，可以用常见的文献管理软件打开和编辑，包括: BibTex, EndNote, ProCite, RefWorks, and Reference Manager.
+	</div>
+	<div class="panel panel-info">
+		<div class="panel-heading">
+			<h4 class="panel-title">选择文件类型/文献管理软件名称</h4>
+		</div>
+		<div class="panel-body">
+			<div class="radio">
+				<label> <input type="radio" value="Ris" checked="checked" name="fileType">
+					RIS (ProCite, Reference Manager)
+				</label>
+			</div>
+			<div class="radio">
+				<label> <input type="radio" value="BibTex" name="fileType">
+					BibTeX
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-warning">
+		<div class="panel-heading">
+			<h4 class="panel-title">选择包含的内容</h4>
+		</div>
+		<div class="panel-body">
+			<div class="radio">
+				<label> <input type="radio" value="md" checked="checked" name="contentType">
+					仅文章引用信息
+				</label>
+			</div>
+			<div class="radio">
+				<label> <input type="radio" value="ab" name="contentType">
+					引用信息及摘要
+				</label>
+			</div>
+		</div>
+	</div>
+	
+	<button type="button" class="btn btn-lg btn-primary modal-button" style="width:50%;margin:0 auto;display: block;padding: 7px;"
+		onclick="downloadCitations()">导出</button>
+	</form>
+</div>
+<!--Export弹出end-->
+<!-- develop end -->
+
+
+		<div class="yicangdsjk">
+			<div class="yicangdsjk_div">
+				<div class="yicangdsjk_div_left">
+					<p class="yicangdsjk_div_left_title">基于事件检测与CNN模型的非侵入式负荷识别方法及实现</p>
+					<p class="yicangdsjk_div_left_authe">
+						凌家源， 彭勇刚
+					</p>
+					<p class="yicangdsjk_div_left_authe">
+						<a href="https://ateee.iee.ac.cn" class="main_content_top_div_a">电工电能新技术</a>
+					<span class="main_content_top_div_span">››</span>
+					<a href="https://ateee.iee.ac.cn/CN/archive/2021" class="main_content_top_div_a">2021, Vol. 40</a>
+					
+					<span class="main_content_top_div_span">››</span>
+					<a href="https://ateee.iee.ac.cn/CN/Y2021/V40/I3" class="main_content_top_div_a">Issue (3)</a>
+					<span class="main_content_top_div_span">: 46-54.</span>
+					
+					</p>
+				</div>
+				<div class="yicangdsjk_div_right">
+				
+					
+					<div class="main_content_center_right_pdf" style="width: 90%;float: left;">
+						<img src="/develop/static/common/images/pdf.png" class="main_content_center_right_pdf_img">
+						<b class="main_content_center_right_pdf_b">
+							PDF(1364 KB) 
+						</b>
+						<i class="glyphicon glyphicon-save main_content_center_right_pdf_i" onclick="lsdy1('PDF',2327)"></i>
+					</div>
+					
+					
+					<i class="glyphicon glyphicon-remove yicangdsjk_div_right_i" onclick="closedk()"></i>
+				</div>
+			</div>
+		</div>
+		<div class="main_top_cm">
+			<script src='https://tongji.journalreport.cn/mstatistics.service.js' ></script><script>recordAdd('5052b214b6244df6a2aafe6ce685576d')</script>
+
+
+<script language="javascript">
+	function tabChange(obj, id) {
+		var arrayli = obj.parentNode.getElementsByTagName("li"); //获取li数组
+		var arrayul = document.getElementById(id).getElementsByTagName("ul"); //获取ul数组
+		for (i = 0; i < arrayul.length; i++) {
+			if (obj == arrayli[i]) {
+				arrayli[i].className = "cli";
+				arrayul[i].className = "";
+			} else {
+				arrayli[i].className = "";
+				arrayul[i].className = "hidden";
+			}
+		}
+	}
+</script>
+<style type="text/css">
+.tabbox {
+	width: 400px;
+	margin-top: 5px;
+	margin-bottom: 5px
+}
+
+.tabmenu {
+	width: 400px;
+	height: 28px;
+	border-left: 1px solid #CCC;
+	border-top: 1px solid #ccc;
+}
+
+.tabmenu ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+.tabmenu li {
+	text-align: center;
+	float: left;
+	display: block;
+	width: 99px;
+	overflow: hidden;
+	background-color: #f1f1f1;
+	line-height: 27px;
+	border-right: #ccc 1px solid;
+	border-bottom: #ccc 1px solid;
+	display: inline;
+}
+
+.tabmenu .cli {
+	text-align: center;
+	float: left;
+	display: block;
+	width: 99px;
+	overflow: hidden;
+	background-color: #fff;
+	line-height: 27px;
+	border-right: #ccc 1px solid;
+	border-bottom: #fff 1px solid;
+	display: inline;
+	cursor: pointer;
+	color: #c30000;
+	font-weight: bold
+}
+
+#tabcontent {
+	width: 399px;
+	background-color: #fff;
+	border-left: #CCC 1px solid;
+	border-right: #CCC 1px solid;
+	border-bottom: #CCC 1px solid;
+	height: 65px;
+}
+
+#tabcontent ul {
+	margin: 0;
+	padding: 5px;
+	list-style-type: none;
+}
+
+#tabcontent .hidden {
+	display: none;
+}
+
+img[src*='.traceImg']{
+	width:44px;
+	height:22px;
+}
+</style>
+
+<!--头部-->
+<div class="header">
+<div class="banner">
+		<div class="col-lg-7 col-md-7 col-sm-7">
+		<img src="https://ateee.iee.ac.cn/images/1003-3076/images/banner.png" class="img-responsive">
+		</div>
+		<div class="col-lg-5 col-md-5 col-sm-5">
+			<div class="tabPanel">
+				<ul>
+					<li class="hit">快速检索</li>
+					<li>年期检索</li>
+					<li><a href="https://ateee.iee.ac.cn/CN/advsearch">高级检索</a></li>
+				</ul>
+				<div class="panes">
+					<div class="pane" style="display:block;">
+						<div class="article-search">
+							<div mag-component-type="ajaxPage" mag-page-url="https://ateee.iee.ac.cn/CN/article/quickSearch.do"></div>
+						</div>
+					</div>
+					<div class="pane">
+						 <div class="jskuang2">
+							<IFRAME id="UserInfo" border=0 src="https://ateee.iee.ac.cn/CN/article/nianQiRapidSearch.jsp" width=100% height=38 scrolling=no frameborder=0 allowtransparency="true"></IFRAME>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				$(function(){	
+					$('.tabPanel ul li').click(function(){
+						$(this).addClass('hit').siblings().removeClass('hit');
+						$('.panes>div:eq('+$(this).index()+')').show().siblings().hide();	
+					})
+				})
+			</script>
+			 
+		</div>	
+</div>
+</div>
+
+<div class="daohang">
+	<div class="navbar site-nav">
+		<div class="navbar-header">
+			<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<div class="navbar-brand visible-xs"></div>
+		</div>
+		<div class="navbar-collapse collapse" role="navigation">
+			
+			<ul class="nav navbar-nav">
+				<li><a class="one-color" href="https://ateee.iee.ac.cn/CN/home">首页</a></li>
+				<li><a href="https://ateee.iee.ac.cn/CN/column/column1.shtml">期刊介绍</a></li>
+				<li><a href="https://ateee.iee.ac.cn/CN/column/column2.shtml">编委会</a></li>
+				<li role="presentation" class="dropdown">
+				   <a href="#" class="dropdown-toggle" data-toggle="dropdown">投稿指南<b class="caret"></b></a>
+				   <ul class="dropdown-menu">
+				   <li><a href="https://ateee.iee.ac.cn/CN/column/column3.shtml">投稿须知</a></li>
+				   <li><a href="https://ateee.iee.ac.cn/CN/column/column14.shtml">投稿所需</a></li>
+				   <li><a href="https://ateee.iee.ac.cn/CN/column/column15.shtml">稿件流程</a></li>
+				   <li><a href="https://ateee.iee.ac.cn/CN/column/column16.shtml">伦理规范</a></li>
+				   <li><a href="https://ateee.iee.ac.cn/CN/column/column17.shtml">数据共享</a></li>
+				   </ul>
+				</li>
+				<li><a href="https://ateee.iee.ac.cn/CN/column/column4.shtml">期刊订阅</a></li>
+				<li role="presentation" class="dropdown">
+				   <a href="#" class="dropdown-toggle" data-toggle="dropdown">审稿服务<b class="caret"></b></a>
+				   <ul class="dropdown-menu">
+				   <li role="presentation"><a role="menuitem" tabindex="-1" href="https://ateee.iee.ac.cn/CN/column/column18.shtml">审稿须知</a></li>
+				   <li role="presentation"><a role="menuitem" tabindex="-1" href="https://ateee.iee.ac.cn/CN/column/column19.shtml">审稿流程</a></li>
+				   <li role="presentation"><a role="menuitem" tabindex="-1" href="https://ateee.iee.ac.cn/CN/column/column16.shtml">伦理规范</a></li>
+				   </ul>
+				</li>
+				<li><a href="https://ateee.iee.ac.cn/CN/column/column12.shtml">道德声明</a></li>
+				<li><a href="https://ateee.iee.ac.cn/CN/column/column13.shtml">常见问题</a></li>
+				<li><a href="https://ateee.iee.ac.cn/CN/column/column5.shtml">联系我们</a></li>
+				<li><a href="https://ateee.iee.ac.cn/EN/home" target="_blank">English</a></li>
+			</ul>
+			
+		</div>
+	</div>		
+</div>    
+
+
+
+
+		</div>
+		<div class="main_content">
+			<div class="main_content_top">
+				
+					<div class="main_content_center_right_pdf1" style="cursor: pointer; width:100%;" onclick="lsdy1('PDF',2327)">
+						<img src="/develop/static/common/images/pdf.png" class="main_content_center_right_pdf_img">
+						<b class="main_content_center_right_pdf_b">
+							PDF(1364 KB) 
+						</b>
+						<i class="glyphicon glyphicon-save main_content_center_right_pdf_i"></i>
+					</div>
+				
+			
+				<div class="main_content_top_div">
+					<a href="https://ateee.iee.ac.cn" class="main_content_top_div_a">电工电能新技术</a>
+					<span class="main_content_top_div_span">››</span>
+					<a href="https://ateee.iee.ac.cn/CN/archive/2021" class="main_content_top_div_a">2021, Vol. 40</a>
+					
+					<span class="main_content_top_div_span">››</span>
+					<a href="https://ateee.iee.ac.cn/CN/Y2021/V40/I3" class="main_content_top_div_a">Issue (3)</a>
+					<span class="main_content_top_div_span">: 46-54.</span>
+					
+					
+					
+					<span class="main_content_top_div_span">DOI:</span>
+					<a href="https://doi.org/10.12067/ATEEE2010034" class="main_content_top_div_a">10.12067/ATEEE2010034</a>
+					
+					
+				</div>
+				
+				
+				<div class="main_content_top_btn">
+					<a class="main_content_top_btn_anniu">新技术应用</a>
+				</div>
+				
+				
+				<p class="main_content_top_title">基于事件检测与CNN模型的非侵入式负荷识别方法及实现</p>
+				<div class="main_content_top_btn">
+					<ul class="main_content_top_btn_ul">
+					{{javascript:window.custom_author_cn_index=0;}}
+					<template m-if="{{authorList}} && {{authorList.length}}>0" m-for-array="{{authorList_cn}}" m-for-val="custom_author" m-for-index="custom_index">
+						<li m-if="{{custom_author.name_cn}} && {{custom_author.name_cn}}!=''">
+							<a href="javascript:;" onclick="richClickAuthor('{{custom_author.name_cn}}')">{{custom_author.name_cn}}</a>
+							{{custom_author.xref}}
+							<sup m-if="{{custom_author.email}} && {{custom_author.email}}!=''"><a href="mailto:{{custom_author.email}}"><i class="glyphicon glyphicon-envelope main_content_top_btn_ul_i"></i></a></sup>
+							<span m-if="window.custom_author_cn_index<{{authorList_cn}}.length-1">,&nbsp;&nbsp;</span>
+							{{javascript:window.custom_author_cn_index++;}}
+						</li>
+					</template>
+						<li m-if="!{{authorList}} || {{authorList.length}}==0">{{article.zuoZhe_CN}}</li>
+					</ul>
+				</div>
+				<div class="Author_contribution">
+					<b>作者信息</b>
+					<span class="Author_contribution_i" onclick="slide_up(this)">+</span>
+				</div>
+				<div class="Author_contribution_content" style="display: none;">
+				
+				<template m-for-array="{{affList_cn}}" m-for-val="custom_zuoZheDiZhi">
+					<div style="margin-bottom:10px;">{{custom_zuoZheDiZhi}}</div>
+				</template>
+				
+				<div m-if="({{authorNotesCommon_cn}} && {{authorNotesCommon_cn.length>0}}) || ({{bioList_cn}} && {{bioList_cn.length>0}})" style="margin-bottom:10px;">
+					<strong>作者简介:</strong>
+				</div>
+				
+				<template m-for-array="{{authorNotesCommon_cn}}" m-for-val="custom_authorNodes">
+					<div style="margin-bottom:10px;">{{custom_authorNodes}}</div>
+				</template>
+				
+				<!-- 作者简历资料 -->
+				<template m-for-val="custom_bio" m-for-array="{{bioList_cn}}">
+					<div m-not-empty="{{custom_bio.imgUrl}}" class="row" style="margin-bottom:10px;margin-top:10px;">
+						<div class="col-md-2 col-sm-2 col-xs-12" style="max-width:150px;">
+							<img src="/{{magDir}}/{{custom_bio.imgUrl}}" class="img-responsive img-rounded"/>
+						</div>
+						<div class="col-md-10 col-sm-10 col-xs-12">
+							{{custom_bio.content}}
+						</div>
+					</div>
+					<div m-empty="{{custom_bio.imgUrl}}" style="margin-bottom:10px;margin-top:10px;">
+						{{custom_bio.content}}
+					</div>
+				</template>
+				
+				<div m-if="{{authorNotesCorresp_cn}} && {{authorNotesCorresp_cn.length>0}}" style="margin-bottom:10px;">
+					<strong>通信作者:</strong>
+				</div>
+				<template m-for-array="{{authorNotesCorresp_cn}}" m-for-val="custom_authorNodes">
+					<div style="margin-bottom:10px;">{{custom_authorNodes}}</div>
+				</template>
+				
+					<div class="Put_it_away" onclick="Author_details_put_away(this)">
+						折叠
+					</div>
+				</div>
+				
+				
+				
+				<p class="main_content_top_title">Implementation of a non-intrusive load identification method based on event detection and CNN model</p>
+				<div class="main_content_top_btn">
+					<ul class="main_content_top_btn_ul">
+					{{javascript:window.custom_author_en_index=0;}}
+					<template m-if="{{authorList}} && {{authorList.length}}>0" m-for-array="{{authorList_en}}" m-for-val="custom_author" m-for-index="custom_index">
+						<li m-if="{{custom_author.name_en}} && {{custom_author.name_en}}!=''">
+							<a href="javascript:;" onclick="richClickAuthor('{{custom_author.name_en}}')">{{custom_author.name_en}}</a>
+							{{custom_author.xref}}
+							<sup m-if="{{custom_author.email}} && {{custom_author.email}}!=''"><a href="mailto:{{custom_author.email}}"><i class="glyphicon glyphicon-envelope main_content_top_btn_ul_i"></i></a></sup>
+							<span m-if="window.custom_author_en_index<{{authorList_en}}.length-1">,&nbsp;&nbsp;</span>
+							{{javascript:window.custom_author_en_index++;}}
+						</li>
+					</template>
+						<li m-if="!{{authorList}} || {{authorList.length}}==0">{{article.zuoZhe_EN}}</li>
+					</ul>
+				</div>
+				<div class="Author_contribution">
+					<b>Author information</b>
+					<span class="Author_contribution_i" onclick="slide_up(this)">+</span>
+				</div>
+				<div class="Author_contribution_content" style="display: none;">
+				
+				<template m-for-array="{{affList_en}}" m-for-val="custom_zuoZheDiZhi">
+					<div style="margin-bottom:10px;">{{custom_zuoZheDiZhi}}</div>
+				</template>
+				
+				<div m-if="({{authorNotesCommon_en}} && {{authorNotesCommon_en.length>0}}) || ({{bioList_en}} && {{bioList_en.length>0}})" style="margin-bottom:10px;">
+					<strong>Aboat authors:</strong>
+				</div>
+				
+				<template m-for-array="{{authorNotesCommon_en}}" m-for-val="custom_authorNodes">
+					<div style="margin-bottom:10px;">{{custom_authorNodes}}</div>
+				</template>
+				
+				<!-- 作者简历资料 -->
+				<template m-for-val="custom_bio" m-for-array="{{bioList_en}}">
+					<div m-not-empty="{{custom_bio.imgUrl}}" class="row" style="margin-bottom:10px;margin-top:10px;">
+						<div class="col-md-2 col-sm-2 col-xs-12" style="max-width:150px;">
+							<img src="/{{magDir}}/{{custom_bio.imgUrl}}" class="img-responsive img-rounded"/>
+						</div>
+						<div class="col-md-10 col-sm-10 col-xs-12">
+							{{custom_bio.content}}
+						</div>
+					</div>
+					<div m-empty="{{custom_bio.imgUrl}}" style="margin-bottom:10px;margin-top:10px;">
+						{{custom_bio.content}}
+					</div>
+				</template>
+				
+				<div m-if="{{authorNotesCorresp_en}} && {{authorNotesCorresp_en.length>0}}" style="margin-bottom:10px;">
+					<strong>Corresponding authors:</strong>
+				</div>
+				<template m-for-array="{{authorNotesCorresp_en}}" m-for-val="custom_authorNodes">
+					<div style="margin-bottom:10px;">{{custom_authorNodes}}</div>
+				</template>
+				
+					<div class="Put_it_away" onclick="Author_details_put_away(this)">
+						Collapse
+					</div>
+				</div>
+				
+				
+				
+				<div class="Author_contribution">
+					<b>文章历史</b>
+					<span class="Author_contribution_i" onclick="slide_up(this)">+</span>
+				</div>
+				<div class="Author_contribution_content" style="display: none;padding: 0px;background: none;">
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					<table class="new_full_Article_history" style="width: 60%;">
+						<thead>
+							<tr>
+								<th>收稿日期</th>
+								
+								
+								<th>出版日期</th>
+								
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>2020-10-25</td>
+								
+								
+								<td>2021-03-23</td>
+								
+							</tr>
+						
+							<tr>
+								
+								
+								<th>发布日期</th>
+								<th colspan="1">&nbsp;</th>
+							</tr>
+						
+							<tr>
+								
+								
+								<td>2021-03-29</td>
+								<td colspan="1">&nbsp;</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			
+			<div class="main_content_center">
+				<div class="main_content_center_left">
+				
+					<div m-if="{{article.keyPoints_cn}} && {{article.keyPoints_cn}}!=''" class="main_content_center_left_one_title yijibiaotidkk">
+						<h3 class="cas_nav_daohang"><b>本文亮点</b></h3>
+						<i class="glyphicon glyphicon-minus main_content_center_left_one_title_i" onclick="zhaiyaozhan(this)"></i>
+					</div>
+					<div m-if="{{article.keyPoints_cn}} && {{article.keyPoints_cn}}!=''" class="zhaiyaojs">
+						<div style="margin-bottom:10px;" class="main_content_center_left_zhengwen">
+							{{article.keyPoints_cn}}
+						</div>
+					</div>
+					
+					<div m-if="{{article.keyPoints_en}} && {{article.keyPoints_en}}!=''" class="main_content_center_left_one_title yijibiaotidkk">
+						<h3 class="cas_nav_daohang"><b>HeighLight</b></h3>
+						<i class="glyphicon glyphicon-minus main_content_center_left_one_title_i" onclick="zhaiyaozhan(this)"></i>
+					</div>
+					<div m-if="{{article.keyPoints_en}} && {{article.keyPoints_en}}!=''" class="zhaiyaojs">
+						<div style="margin-bottom:10px;" class="main_content_center_left_zhengwen">
+							{{article.keyPoints_en}}
+						</div>
+					</div>
+				
+					<div m-not-empty="{{article.zhaiyao_cn}}" class="main_content_center_left_one_title yijibiaotidkk">
+						<h3 class="cas_nav_daohang"><b>摘要</b></h3>
+						<i class="glyphicon glyphicon-minus main_content_center_left_one_title_i" onclick="zhaiyaozhan(this)"></i>
+					</div>
+					<div class="zhaiyaojs">
+						<div m-not-empty="{{article.zhaiyao_cn}}" style="margin-bottom:10px;" class="main_content_center_left_zhengwen">
+							{{article.zhaiyao_cn}}
+						</div>
+						
+						<div m-if="{{article.zhaiyao_en}} && {{article.zhaiyao_en}}!=''" class="main_content_center_left_one_title yijibiaotidkk" style="border-bottom:none; padding-bottom:0px;margin-top:15px;">
+							<h3 class="cas_nav_daohang"><b>Abstract</b></h3>
+						</div>
+						<div m-if="{{article.zhaiyao_en}} && {{article.zhaiyao_en}}!=''" style="margin-bottom:10px;" class="main_content_center_left_zhengwen">
+							{{article.zhaiyao_en}}
+						</div>
+					
+					
+					
+					
+					
+					<div m-if="{{article.keywordList_cn}} && {{article.keywordList_cn.length}}>0" class="main_content_center_left_one_title yijibiaotidkk" style="border-bottom:none; padding-bottom:0px;margin-top:15px;">
+						<h3 class="cas_nav_daohang"><b>关键词</b></h3>
+					</div>
+					<p m-if="{{article.keywordList_cn}} && {{article.keywordList_cn.length}}>0" class="main_content_center_left_zhengwen" style="margin-top:5px;margin-bottom:15px;">
+						<template m-for-array="{{article.keywordList_cn}}" m-for-val="custom_keyword" m-for-index="custom_index">
+							<a href="javascript:;" onclick="richClickKeyword('{{custom_keyword}}')">{{custom_keyword}}</a>  <span m-if="{{custom_index}}!={{article.keywordList_cn.length}}-1" class="main_content_center_left_zhengwen_pie">/</span>  
+						</template>
+					</p>
+					
+					<div m-if="{{article.keywordList_en}} && {{article.keywordList_en.length}}>0" class="main_content_center_left_one_title yijibiaotidkk" style="border-bottom:none; padding-bottom:0px;margin-top:15px;">
+						<h3 class="cas_nav_daohang"><b>Key words</b></h3>
+					</div>
+					<p m-if="{{article.keywordList_en}} && {{article.keywordList_en.length}}>0" class="main_content_center_left_zhengwen" style="margin-top:5px;margin-bottom:15px;">
+						<template m-for-array="{{article.keywordList_en}}" m-for-val="custom_keyword" m-for-index="custom_index">
+							<a href="javascript:;" onclick="richClickKeyword('{{custom_keyword}}')">{{custom_keyword}}</a>  <span m-if="{{custom_index}}!={{article.keywordList_en.length}}-1" class="main_content_center_left_zhengwen_pie">/</span>  
+						</template>
+					</p>
+					
+					</div>
+					
+					<div m-not-empty="{{article.code2dImg}}" class="main_content_center_left_one_title yijibiaotidkk" style="border-bottom:none; padding-bottom:0px;margin-top:15px;">
+						<h3 class="cas_nav_daohang"><b>本文二维码</b></h3>
+					</div>
+					<div m-not-empty="{{article.code2dImg}}" class="zhaiyaojs" style="margin-top:5px;margin-bottom:15px;">
+						<div class="main_content_center_left_abstract">
+							<img src="/{{magDir}}/{{article.code2dImg}}" class="main_content_center_left_abstract_img">						
+						</div>
+					</div>
+					
+					<div class="main_content_center_left_one_title yijibiaotidkk">
+						<h3 class="cas_nav_daohang"><b>引用本文</b></h3>
+						
+						<div class="daochu_div">
+							<p>
+								<a href="https://ateee.iee.ac.cn/CN/article/getTxtFile.do?fileType=EndNote&id=2327">EndNote</a>
+							</p>
+							<p>
+								<a href="https://ateee.iee.ac.cn/CN/article/getTxtFile.do?fileType=Ris&id=2327">Ris (Procite)</a>
+							</p>
+							<p>
+								<a href="https://ateee.iee.ac.cn/CN/article/getTxtFile.do?fileType=BibTeX&id=2327">Bibtex</a>
+							</p>
+						</div>
+						<div class="main_content_center_left_one_title_div" onclick="exportCitations()">
+							<span class="main_content_center_left_one_title_div_one">导出引用</span>
+						</div>
+						
+					</div> 
+					
+					<div class="main_content_center_left_yinyong">
+						<div class="main_content_center_left_yinyong_bao">
+							<div class="main_content_center_left_yinyong_div">
+								<div>
+									<template m-if="{{authorList_cn}} && {{authorList_cn.length}}>0" m-for-array="{{authorList_cn}}" m-for-val="custom_author" m-for-index="custom_index" >
+									<span m-if="{{custom_index}}>0">, </span>{{custom_author.name_cn}}<span m-if="{{custom_index}}=={{authorList_cn.length}}-1">. </span>
+									</template>
+									<span m-if="!{{authorList_cn}} || {{authorList_cn.length}}==0" m-not-empty="{{article.zuoZheCn_L}}">{{article.zuoZheCn_L}}. </span>
+									{{article.title_cn}}[J]. {{journal.qiKanMingCheng_CN}}, 2021, 40(3): 46-54 https://doi.org/10.12067/ATEEE2010034
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="main_content_center_left_yinyong">
+						<div class="main_content_center_left_yinyong_bao">
+							<div class="main_content_center_left_yinyong_div">
+								<div>
+									<template m-if="{{authorList_en}} && {{authorList_en.length}}>0" m-for-array="{{authorList_en}}" m-for-val="custom_author" m-for-index="custom_index" >
+									<span m-if="{{custom_index}}>0">, </span>{{custom_author.name_en}}<span m-if="{{custom_index}}=={{authorList_en.length}}-1">. </span>
+									</template>
+									<span m-if="!{{authorList_en}} || {{authorList_en.length}}==0" m-not-empty="{{article.zuoZheEn_L}}">{{article.zuoZheEn_L}}. </span>
+									{{article.title_en}}[J]. <i>{{journal.qiKanMingCheng_EN}}</i>, 2021, 40(3): 46-54 https://doi.org/10.12067/ATEEE2010034
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="main_content_center_left_yinyong">
+						<div m-if="{{article.clcIndexList_cn}} && {{article.clcIndexList_cn}}.length>0" class="cas_nav_daohang">
+							<b>中图分类号：</b>
+							<template m-for-val="custom_clc" m-for-array="{{article.clcIndexList_cn}}" m-for-index="custom_clcIndex">
+							<span code="{{custom_clc.code}}" text="{{custom_clc.text}}" class="main_content_center_left_zhengwen_bao_zhengwen nozuish">
+							{{custom_clc.code}} 
+							<span m-not-empty="{{custom_clc.text}}">({{custom_clc.text}})</span>
+							&nbsp;&nbsp;
+							</span>
+							</template>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+					<div class="main_content_center_left_caozuo">
+						<span mag-component-type="previousArticle" mag-articleId="2327"></span>
+						<span mag-component-type="nextArticle" mag-articleId="2327"></span>
+					</div>
+					<div class="main_content_center_left_zhengwen_bao">
+						
+						<!-- 正文 -->
+						<div id="bodyVue" m-workspace  m-if="{{body}} && {{body.secList.length}}>0" class="main_content_center_left_zhengwen_bao_zw">
+							<template id="template_secL" m-for-array="{{body.secList}}" m-for-val="custom_sec">
+								<div m-if="{{custom_sec.type}}=='sec' && {{custom_sec.level}}==1" class="main_content_center_left_one_title zhengwem_title yijibiaotidkk">
+									<h3 class="cas_nav_daohang mag_rich_body_title" level="{{custom_sec.level}}"><b><span class="body_sec_title">{{custom_sec.title}}</span></b></h3>
+								</div>
+								<div m-if="{{custom_sec.type}}=='sec' && {{custom_sec.level}}>=2" class="main_content_center_left_zhengwen_bao_erji_title main_content_center_left_one_title" style="font-size: 16px;">
+									<h4 class="cas_nav_daohang mag_rich_body_title" level="{{custom_sec.level}}" style="font-size: 16px;"><b><span class="body_sec_title">{{custom_sec.title}}</span></b></h4>
+								</div>
+								<template m-if="{{custom_sec.type}}=='sec'" m-for-array="{{custom_sec.secList}}" m-for-val="custom_sec" m-for-template-ref="template_secL">
+								</template>
+								{{custom_sec.content}}
+							</template>
+						</div>
+						<!-- 正文-END -->
+						
+						<!-- 参考文献 -->
+						<div m-if="{{referenceList}} && {{referenceList.length}}>0" class="main_content_center_left_one_title zhengwem_title" style="border-bottom: 1px solid #ccc;">
+							<h3 class="cas_nav_daohang"><b>参考文献</b></h3>
+							<div class="References_div">
+								<a href="javascript:;" class="References_div_a" onclick="referenceOrderByType(1)">原文顺序</a>
+								<span class="References_div_span">|</span>
+								<a href="javascript:;" class="References_div_a" onclick="referenceOrderByType(2)">文献年度倒序</a>
+								<span class="References_div_span">|</span>
+								<a href="javascript:;" class="References_div_a" onclick="referenceOrderByType(3)">文中引用次数倒序</a>
+							</div>
+						</div>
+						<div m-if="{{referenceList}} && {{referenceList.length}}>0" class="main_content_center_left_one_cankaowenxian">
+							<div id="mag_rich_ref_tab" class="main_content_center_left_one_cankaowenxian_tab">
+							<template m-for-array="{{referenceList}}" m-for-val="custom_ref" m-for-index="custom_index">
+							<table class="mag_rich_ref_table main_content_center_left_one_cankaowenxian_tab" id="mag_rich_ref_{{custom_ref.id}}" order-1-num="{{custom_index}}" order-2-num="{{custom_ref.nian}}" order-3-num="{{custom_ref.citedCount}}">
+								<tr style="border-bottom:1px dashed #d9d9d9;" class="mag_rich_ref_tr">
+									<td class="main_content_center_left_one_cankaowenxian_tab_td" valign="top" width="7%" nowrap>{{custom_ref.label}}</td>
+									<td width="93%">
+									<template m-for-array="{{custom_ref.citationList}}" m-for-val="custom_citation" m-for-index="custom_citationIndex">
+										<div class="new_full_rich_cankaowenxian_zuozhe">{{custom_citation.content}}</div>
+										<div m-if="{{custom_citation.doi}} && {{custom_citation.doi}}!=''" class="new_full_rich_cankaowenxian_zuozhe new_full_rich_cankaowenxian_lianjie"><a href="https://doi.org/{{custom_citation.doi}}" target="_blank">https://doi.org/{{custom_citation.doi}}</a></div>
+										<div m-if="{{custom_citation.pmid}} && {{custom_citation.pmid}}!=''" class="new_full_rich_cankaowenxian_zuozhe new_full_rich_cankaowenxian_lianjie"><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{custom_citation.pmid}}">https://www.ncbi.nlm.nih.gov/pubmed/{{custom_citation.pmid}}</a></div>
+										<div m-if="{{custom_citation.url}} && {{custom_citation.url}}!=''" class="new_full_rich_cankaowenxian_zuozhe new_full_rich_cankaowenxian_lianjie"><a href="{{custom_citation.url}}">{{custom_citation.url}}</a></div>
+										<div m-if="({{custom_citationIndex}}=={{custom_ref.citationList}}.length-1) || ({{custom_citation.annotation}} && {{custom_citation.annotation}}!='')" class="mag_main_zhengwen_left_div_ckwx_table_benwenyiny mag_rich_ref_abstract">
+											
+											<a m-if="{{custom_ref.citedCount>0}} && {{custom_citationIndex}}=={{custom_ref.citationList}}.length-1" href="javascript:;" class="cas-main_ry_a mag_rich_ref_citedCount" style="color: #5079b7;margin-right:15px;" onclick="piaofuRefCited(this,'{{custom_ref.id}}')">本文引用 [{{custom_ref.citedCount}}]</a>
+											<template m-if="{{custom_citationIndex}}=={{custom_ref.citationList}}.length-1" m-for-val="custom_bodyP_id" m-for-array="{{custom_ref.bodyP_ids}}">
+												<input type="hidden" name="mag_rich_ref_bodyP_ids_{{custom_ref.id}}" value="{{custom_bodyP_id}}">
+											</template>
+											
+											<span m-if="{{custom_citation.annotation}} && {{custom_citation.annotation}}!=''" style="color: #666;">摘要</span>
+											<i m-if="{{custom_citation.annotation}} && {{custom_citation.annotation}}!=''" class="glyphicon glyphicon-triangle-bottom biaotijiantoush biaotijiantoush1" onclick="ckwx_show_hide(this)"></i>
+										</div>
+										<div m-if="{{custom_citation.annotation}} && {{custom_citation.annotation}}!=''" class="mag_main_zhengwen_left_div_ckwx_table_ckwx_xiangqing">
+											{{custom_citation.annotation}}
+										</div>
+									</template>
+									</td>
+								</tr>
+							</table>
+							</template>
+							</div>
+						</div>
+						
+						<div m-not-empty="{{article.reference}}" m-if="!{{referenceList}} || {{referenceList.length}}==0" class="main_content_center_left_one_title zhengwem_title" style="border-bottom: 1px solid #ccc;">
+							<h3 class="cas_nav_daohang"><b>参考文献</b></h3>
+						</div>
+						<div m-not-empty="{{article.reference}}" m-if="!{{referenceList}} || {{referenceList.length}}==0" class="main_content_center_left_one_cankaowenxian">
+							{{article.reference}}
+						</div>
+						
+						<!-- back/fn-group -->
+						<template m-for-val="custom_fnGroup" m-for-array="{{backFnGroupList}}">
+						<div class="main_content_center_left_zhengwen_bao_zw">
+							<div m-not-empty="{{custom_fnGroup.title_cn}}" class="main_content_center_left_one_title zhengwem_title yijibiaotidkk">
+								<h3 class="cas_nav_daohang"><b>{{custom_fnGroup.title_cn}}</b></h3>
+							</div>
+							<div m-empty="{{custom_fnGroup.title_cn}}" class="main_content_center_left_one_title zhengwem_title yijibiaotidkk">
+								<h3 class="cas_nav_daohang"><b>脚注</b></h3>
+							</div>
+							<template m-for-val="custom_fn" m-for-array="{{custom_fnGroup.fnList}}">
+								<div class="main_content_center_left_zhengwen_bao_zhengwen nozuish">
+									{{custom_fn.content}}
+								</div>
+							</template>
+						</div>
+						</template>
+						
+						<!-- 致谢 -->
+						<div m-if="{{ackList}} && {{ackList.length>0}}" class="main_content_center_left_zhengwen_bao_zw">
+							<template m-for-array="{{ackList}}" m-for-val="custom_ack">
+								<div m-if="{{custom_ack.title_cn}} && {{custom_ack.title_cn.length>0}}" class="main_content_center_left_one_title zhengwem_title yijibiaotidkk">
+									<h3 class="cas_nav_daohang mag_rich_body_title"><b>{{custom_ack.title_cn}}</b></h3>
+								</div>
+								{{custom_ack.content}}
+							</template>
+						</div>
+						
+						<!-- 基金 -->
+						<div m-if="{{fundList_cn}} && {{fundList_cn.length>0}}" class="main_content_center_left_zhengwen_bao_zw">
+							<div class="main_content_center_left_one_title zhengwem_title yijibiaotidkk">
+								<h3 class="cas_nav_daohang"><b>基金</b></h3>
+							</div>
+							<template m-for-array="{{fundList_cn}}" m-for-val="custom_fund">
+								<div class="main_content_center_left_zhengwen_bao_zhengwen nozuish">{{custom_fund}}</div>
+							</template>
+						</div>
+						
+						<!-- 版权声明 -->
+						<div m-if="({{article.copyrightStatement_cn}} && {{article.copyrightStatement_cn!=''}}) || ({{article.copyrightLicense_cn}} && {{article.copyrightLicense_cn!=''}})" class="main_content_center_left_zhengwen_bao_zw">
+							<div class="main_content_center_left_one_title zhengwem_title yijibiaotidkk">
+								<h3 class="cas_nav_daohang"><b>版权</b></h3>
+							</div>
+							<div m-if="{{article.copyrightStatement_cn}} && {{article.copyrightStatement_cn!=''}}" class="main_content_center_left_zhengwen_bao_zhengwen nozuish">{{article.copyrightStatement_cn}}</div>
+							<div m-if="{{article.copyrightLicense_cn}} && {{article.copyrightLicense_cn!=''}}" class="main_content_center_left_zhengwen_bao_zhengwen nozuish">{{article.copyrightLicense_cn}}</div>
+						</div>
+						
+					</div>
+				</div>
+				<div class="main_content_center_right shoujihadhjsdj">
+				<!-- 分享 -->
+				<div class="main_content_center_share">
+				<div class="bshare-custom" style="display:contents;">
+				   <a title="facebook" class="bshare-facebook"></a>
+				   <a title="twitter" class="bshare-twitter"></a>
+				   <a title="gplus" class="bshare-gplus"></a>
+				   <a title="wechat" class="bshare-weixin"></a>
+				   <a title="qq" class="bshare-qqim"></a>
+				   <a class="shareCount"></a>
+				</div>
+				
+				<!-- Share on Mendeley-->
+				<a href="https://www.mendeley.com/import/?doi=10.12067/ATEEE2010034" title="Share on Mendeley" target="_blank" rel="noopener">
+					<img src="/images/share/icon-mendeley.svg" style="margin-left:3px;height: 27px;border-radius: 50%;float:right;">
+				</a>
+				
+				
+				<script type="text/javascript" charset="utf-8" src="https://static.bshare.cn/b/buttonLite.js#uuid=4a4d48e3-6e33-49d5-b631-997a546b3f7e&style=999&lang=en&ssc=true"></script>
+				<script type="text/javascript" charset="utf-8" src="https://static.bshare.cn/b/bshareC2.js"></script></div>
+				<div class="clearfix"></div>
+				
+					
+					<div  class="main_content_center_right_pdf">
+						<img src="/develop/static/common/images/pdf.png" class="main_content_center_right_pdf_img">
+						<b class="main_content_center_right_pdf_b">
+							PDF(1364 KB) 
+						</b>
+						<i class="glyphicon glyphicon-save main_content_center_right_pdf_i" onclick="lsdy1('PDF',2327)"></i>
+					</div>
+					
+					
+					<!-- 补充材料 -->
+					<div id="showArticle_suppls"></div>
+					
+					<!-- 专题 -->
+					<div id="showArticle_subjects"></div>
+					
+					<div class="main_content_center_right_duoweidu" >
+						<div class="main_content_center_right_duoweidu_div">
+							<p class="main_content_center_right_duoweidu_div_shu" style="height: 26px;"><span mag-component-type="articleAccessesCount" mag-articleId="2327"></span></p>
+							<p class="main_content_center_right_duoweidu_div_shu_shuo">Accesses</p>
+						</div>
+						<div class="main_content_center_right_duoweidu_div">
+							<p class="main_content_center_right_duoweidu_div_shu" style="height: 26px;"><span mag-component-type="articleCitedCount" mag-articleId="2327"></span></p>
+							<p class="main_content_center_right_duoweidu_div_shu_shuo">Citation</p>
+						</div>
+						<a id="altmetric-a" target="_blank" style="display:none;">
+						<div class="main_content_center_right_duoweidu_div">
+							<p class="main_content_center_right_duoweidu_div_shu" style="height: 26px;"><span id="altmetric-score"></span></p>
+							<p class="main_content_center_right_duoweidu_div_shu_shuo">Altmetric</p>
+						</div>
+						</a>
+						<a href="javascript:;" onclick="showMetrics()">
+							<div class="main_content_center_right_duoweidu_div">
+								<p class="main_content_center_right_duoweidu_div_shu">
+									<img src="/develop/static/common/images/juxing.png">
+								</p>
+								<p class="main_content_center_right_duoweidu_div_shu_shuo">Detail</p>
+							</div>
+						</a>
+					</div>
+					<div class="huoquoffset"></div>
+					<div class="main_content_center_right_div_tab" id="huoqudndkk">
+						<div class="main_content_center_right_div_tab_top">
+							<div class="main_content_center_right_div_tab_top_div" style="background: #fff;border-top: 2px solid #0d6797;color: #0d6797;"  onclick="zuihoutab(this,'#autoMenu')">
+								段落导航
+							</div>
+							<div class="main_content_center_right_div_tab_top_div"  onclick="loadRelatedArticles();zuihoutab(this,'#relatedArticles');">
+								相关文章
+							</div>
+						</div>
+						<div class="main_content_center_right_div_tab_con"  id="autoMenu">
+							
+						</div>
+						<div class="main_content_center_right_div_tab_con" style="display: none;" id="relatedArticles">
+							<div id="relatedArticles-content"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="main_content_bottom">
+			
+
+
+<div class="footer">
+<div class="banquan">
+	<div class="db1">
+	版权所有 &copy; 《电工电能新技术》编辑部<br>
+地址：北京市2703信箱　<br class="visible-xs">邮编：100190　<br>电话：010-82547196　<br class="visible-xs">E-mail：dgdnedit@mail.iee.ac.cn<br>
+技术支持：<a href="https://www.magtech.com.cn/" target="_blank" class="baise">北京玛格泰克科技发展有限公司</a>
+	</div>
+	<div class="db2">
+		<div class="ewm">
+		<img src="https://ateee.iee.ac.cn/images/1003-3076/images/gfwz.png">
+		<div class="ewm_wz">官方网站</div>
+		</div>
+		<div class="ewm" style="float:right;">
+		<img src="https://ateee.iee.ac.cn/images/1003-3076/images/ewm.jpg">
+		<div class="ewm_wz">公众号</div>
+		</div>
+	</div>	
+</div>
+</div>
+
+<!--返回顶部-->
+<div class="top_web" id="backtop" style="display:block;"> <span class="glyphicon glyphicon-menu-up" aria-hidden="true" ></span></div>
+<!--返回顶部end--> 
+		</div>
+		<div class="new_full_rich_motaikuang" onclick="guanbiann();"></div>
+		<div class="new_full_rich_model">
+			<i class="glyphicon glyphicon-remove-circle full_guanbi" onclick="guanbiann();"></i>
+			<p class="cas_biaotitupiana">
+				<span class="yige"></span>/<span class="zongdea"></span>	
+			</p>
+			<div class="cas_imgaesa">
+				<table class="cas_haoshi">
+					<tbody>
+						<tr>
+							<td onclick="shang();" class="zuo" width="5%">
+								〈
+							</td>
+							<td class="zhong">
+								<img src="" class="tp">
+							</td>
+							<td onclick="xia();" class="you" width="5%">
+									〉
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="neirong">
+				<p class="cas_model_shuoming"></p>
+				<p class="cas_model_shuoming"></p>
+			</div>
+		</div>
+		<div class="newefunrich_right">
+			<div class="newefunrich_right_right_top" title="回到顶部" onclick="fanhuidingbu();" onmouseover="shu_fanhuidinfgbu(this)" onmouseout="u_shu_fanhuidinfgbu(this);" style="font-size: 14px; line-height: 40px;"><i class="glyphicon glyphicon-arrow-up"></i></div>
+			<div class="newefunrich_right_right_top" title="折叠右侧" onclick="zhedieyouce();" onmouseover="shu_zedieyouce(this)" onmouseout="u_shu_zedieyouce(this);" style="font-size: 14px; line-height: 40px;"><i class="glyphicon glyphicon-transfer"></i></div>
+		</div>
+	</body>
+	
+</html>

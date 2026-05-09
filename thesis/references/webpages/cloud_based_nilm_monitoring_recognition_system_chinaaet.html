@@ -1,0 +1,740 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>&#x57FA;&#x4E8E;&#x4E91;&#x5E73;&#x53F0;&#x7684;&#x975E;&#x4FB5;&#x5165;&#x5F0F;&#x8D1F;&#x8377;&#x76D1;&#x6D4B;&#x4E0E;&#x8BC6;&#x522B;&#x7CFB;&#x7EDF;-AET-&#x7535;&#x5B50;&#x6280;&#x672F;&#x5E94;&#x7528;</title>
+    <meta name="renderer" content="webkit">
+    <meta name="keywords" content="&#x975E;&#x4FB5;&#x5165;&#x5F0F;,&#x529F;&#x7387;&#x8BA1;&#x91CF;,&#x8D1F;&#x8377;&#x8BC6;&#x522B;,&#x4E91;&#x670D;&#x52A1;&#x5668;,PCA" />
+    <meta name="description" content="&#x4E3A;&#x4E86;&#x5B9E;&#x65F6;&#x8FDC;&#x7A0B;&#x5730;&#x76D1;&#x6D4B;&#x8D1F;&#x8377;&#x8FD0;&#x8F6C;&#x72B6;&#x6001;&#x548C;&#x8BC6;&#x522B;&#x8D1F;&#x8377;&#x79CD;&#x7C7B;&#xFF0C;&#x8BBE;&#x8BA1;&#x4E86;&#x4E00;&#x79CD;&#x975E;&#x4FB5;&#x5165;&#x5F0F;&#x8D1F;&#x8377;&#x76D1;&#x6D4B;&#x7CFB;&#x7EDF;&#xFF0C;&#x5E76;&#x7814;&#x7A76;&#x57FA;&#x4E8E;PCA&#x548C;kNN&#x7684;&#x8D1F;&#x8377;&#x8BC6;&#x522B;&#x7B97;&#x6CD5;&#x3002;&#x5728;&#x7535;&#x529B;&#x4F9B;&#x7ED9;&#x5165;&#x53E3;&#x7AEF;&#xFF0C;&#x901A;&#x8FC7;&#x5728;&#x8D1F;&#x8377;&#x56DE;&#x8DEF;&#x4E2D;&#x4E32;&#x8054;&#x5EB7;&#x94DC;&#x7535;&#x963B;&#x91C7;&#x6837;&#x5DE5;&#x4F5C;&#x7535;&#x6D41;&#xFF0C;&#x901A;&#x8FC7;&#x7535;&#x963B;&#x5206;&#x538B;&#x7F51;&#x7EDC;&#x91C7;&#x6837;&#x5DE5;&#x4F5C;&#x7535;&#x538B;&#xFF0C;&#x5E76;&#x8BA1;&#x7B97;&#x8D1F;&#x8377;&#x7684;&#x5B9E;&#x65F6;&#x6709;&#x529F;&#x529F;&#x7387;&#xFF0C;&#x4EE5;1 Hz&#x9891;&#x7387;&#x5411;&#x4E91;&#x670D;&#x52A1;&#x5668;&#x53D1;&#x9001;&#x529F;&#x7387;&#x4FE1;&#x606F;&#x3002;&#x5728;&#x4E91;&#x670D;&#x52A1;&#x5668;&#x7AEF;&#xFF0C;&#x901A;&#x8FC7;PCA&#x5BF9;&#x529F;&#x7387;&#x503C;&#x5E8F;&#x5217;&#x8FDB;&#x884C;&#x7279;&#x5F81;&#x63D0;&#x53D6;&#x548C;&#x964D;&#x7EF4;&#xFF0C;&#x901A;&#x8FC7;kNN&#x5BF9;&#x5F53;&#x524D;&#x63A5;&#x5165;&#x7684;&#x8D1F;&#x8377;&#x8FDB;&#x884C;&#x5F52;&#x7C7B;&#xFF0C;&#x7528;&#x6237;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x7EC8;&#x7AEF;&#x8BBE;&#x5907;&#x8BBF;&#x95EE;&#x8D1F;&#x8377;&#x76D1;&#x63A7;&#x754C;&#x9762;&#x3002;&#x5728;&#x5B9E;&#x9A8C;&#x4E2D;&#xFF0C;&#x5C06;&#x7CFB;&#x7EDF;&#x5B89;&#x88C5;&#x4E8E;&#x5899;&#x58C1;&#x63D2;&#x5EA7;&#x4E0A;&#xFF0C;&#x5BF9;8&#x7C7B;&#x5BB6;&#x7528;&#x8D1F;&#x8377;&#x8FDB;&#x884C;&#x76D1;&#x63A7;&#x548C;&#x8BC6;&#x522B;&#xFF0C;&#x591A;&#x6B21;&#x5B9E;&#x9A8C;&#x7ED3;&#x679C;&#x663E;&#x793A;&#x8D1F;&#x8377;&#x5E73;&#x5747;&#x8BC6;&#x522B;&#x7387;&#x8FBE;&#x5230;98%&#x4EE5;&#x4E0A;&#xFF0C;&#x9A8C;&#x8BC1;&#x4E86;&#x8BE5;&#x65B9;&#x6848;&#x7684;&#x51C6;&#x786E;&#x6027;&#x548C;&#x53EF;&#x884C;&#x6027;&#x3002;" />
+    
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="&#x57FA;&#x4E8E;&#x4E91;&#x5E73;&#x53F0;&#x7684;&#x975E;&#x4FB5;&#x5165;&#x5F0F;&#x8D1F;&#x8377;&#x76D1;&#x6D4B;&#x4E0E;&#x8BC6;&#x522B;&#x7CFB;&#x7EDF;" />
+    <meta property="og:description" content="&#x57FA;&#x4E8E;&#x4E91;&#x5E73;&#x53F0;&#x7684;&#x975E;&#x4FB5;&#x5165;&#x5F0F;&#x8D1F;&#x8377;&#x76D1;&#x6D4B;&#x4E0E;&#x8BC6;&#x522B;&#x7CFB;&#x7EDF;" />
+    <meta property="og:url" content="/article/3000090589" />
+
+
+    <meta name="baidu-site-verification" content="AwPHS9A1cs" />
+    <meta name="alexaVerifyID" content="It_YTlo9Ge-4ywquc7vrlXzcSE0" />
+    <meta name="google-site-verification" content="_iI0qtFwQYXuuiFpkcDIdzE4cJafIlGbkEdOS5IwrAQ" />
+    <meta property="qc:admins" content="35306717776301611546375" />
+    <meta property="wb:webmaster" content="6a37ccb195a83630" />
+    <meta name="robots" content="all" />
+    <link href="/favicon.ico" rel="bookmark" type="image/x-icon" />
+    <link href="/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?0bc2b0756b170cff90e37c9e9628af4b";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <link href="/Content/css/gongyou.css" rel="stylesheet" onerror="this.href='//st.chinaaet.com/www/main/css/gongyou.css'" rel="stylesheet" type="text/css">
+
+    
+    <link href="//st.chinaaet.com/www/main/css/erjiye.css" rel="stylesheet" type="text/css">
+    <link href="//st.chinaaet.com/www/main/css/page.css" rel="stylesheet" type="text/css">
+
+    <script src="https://dup.baidustatic.com/js/ds.js"></script>
+</head>
+
+<!--
+<body style="-webkit-filter: grayscale(.95);">
+-->
+
+<body>
+
+
+    
+
+    
+
+
+
+
+<!--start Head2018-->
+<header>
+    <div class="dbg">
+
+    </div>
+    <div class="bg1">
+        <div class="main">
+            <div class="logo">
+                <a href="http://www.chinaaet.com/"><img src="//st.chinaaet.com/www/main/images/logo_03.jpg"></a>
+            </div>
+            <nav id="main_nav">
+                <ul class="clear">
+                    <li class="first active"><a href="/">首页</a></li>
+                    <li class="more">
+                        <a href="/news/">新闻<span><img src="//st.chinaaet.com/www/main/images/nav_03.jpg"></span></a>
+                        <dl>
+                            <dt><span class="arrow"></span></dt>
+                            <dd><a href="/news/trends/">业界动态</a></dd>
+                            <dd><a href="/news/newproduct/">新品快递</a></dd>
+                            <dd><a href="/news/interview/">高端访谈</a></dd>
+                            <dd><a href="/news/aetviewpoint">AET原创</a></dd>
+                            <dd><a href="/news/marketanalysis">市场分析</a></dd>
+                            <dd><a href="/news/imageNews">图说新闻</a></dd>
+                            <dd><a href="/news/exhibition">会展</a></dd>
+                            <dd><a href="/news/topic/">专题</a></dd>
+                            <dd><a href="/news/magaznews/">期刊动态</a></dd>
+                        </dl>
+                    </li>
+                    <li class="more">
+                        <a href="/tech/">设计资源<span><img src="//st.chinaaet.com/www/main/images/nav_03.jpg"></span></a>
+                        <dl>
+                            <dt><span class="arrow"></span></dt>
+                            <dd><a href="/tech/designapplication/">设计应用</a></dd>
+                            <dd><a href="/tech/solution/">解决方案</a></dd>
+                            <dd><a href="/circuit/">电路图</a></dd>
+                            <dd><a href="//blog.chinaaet.com/">技术专栏</a></dd>
+                            <dd><a href="/lib/">资源下载</a></dd>
+                            <dd><a href="/pcb">PCB技术中心</a></dd>
+                            <dd><a href="/tools/">在线工具库</a></dd>
+                        </dl>
+                    </li>
+                    <li class="more">
+                        <a href="javascript:void(0);">技术频道<span><img src="//st.chinaaet.com/www/main/images/nav_03.jpg"></span></a>
+                        <dl>
+                            <dt><span class="arrow"></span></dt>
+                            <dd><a href="/analog/" id="uri-tech-ana">模拟设计</a></dd>
+                            <dd><a href="/embeded/" id="uri-tech-emb">嵌入式技术</a></dd>
+                            <dd><a href="/power/" id="uri-tech-power">电源技术</a></dd>
+                            <dd><a href="/pid/" id="uri-tech-pid">可编程逻辑</a></dd>
+                            <dd><a href="/measurement/" id="uri-tech-meas">测试测量</a></dd>
+                            <dd><a href="/communication/" id="uri-tech-comu">通信与网络</a></dd>
+                        </dl>
+                    </li>
+                    <li class="more">
+                        <a href="javascript:void(0);">行业频道<span><img src="//st.chinaaet.com/www/main/images/nav_03.jpg"></span></a>
+
+
+                        <dl>
+                            <dt><span class="arrow"></span></dt>
+                            <dd ><a href="/automation/">工业自动化</a></dd>
+                            <dd><a href="/iot/">物联网</a></dd>
+                            <dd><a href="/cns/">通信网络</a></dd>
+                            <dd><a href="/the5G/">5G</a></dd>
+                            <dd><a href="/dc/">数据中心</a></dd>
+                            <dd><a href="/is/">信息安全</a></dd>
+                            <dd><a href="/automotive/">汽车电子</a></dd>
+
+
+
+                        </dl>
+                    </li>
+                    <li><a href="http://study.chinaaet.com">大学堂</a></li>
+                    <li><a href="http://journal.chinaaet.com/">期刊</a></li>
+                    <li><a href="/topic/bibliography">文献检索</a></li>
+                </ul>
+            </nav>
+
+
+                <div class="login">
+                    <a href="https://www.chinaaet.com/paper/post" class="qikan">期刊投稿</a>
+                    <div class="dl1">
+                        <a id="login">登录</a>  <!--href="/user/login/?ReturnUrl=%2Farticle%2F3000090589"-->
+                        <a href="/user/register/">注册</a>
+                    </div>
+                    
+                </div>
+
+
+        </div>
+    </div>
+</header>
+
+<!--end Head2018-->
+<script src="//st.chinaaet.com/main/js/jquery.min.js"></script>
+<script src="//st.chinaaet.com/main/js/login.js?t=20260327"></script>
+<script type="text/javascript">
+
+
+    $("#login").click(function () {
+        const today = new Date();
+        const startDate = new Date('2026-05-01');
+        const endDate = new Date('2026-05-05');
+
+        // 设置为当天的开始和结束时间，避免时间部分的影响
+        today.setHours(0, 0, 0, 0);
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(0, 0, 0, 0);
+
+        if (today >= startDate && today <= endDate) {
+            layer.open({
+                type: 1,
+                shade: [0.3, '#393D49'],
+                offset: '150px',
+                title: false,
+                closeBtn: 1,
+                time: 3000,
+                area: ['540px', '613px'],
+                content: '<img src="//img.chinaaet.com/images/20260501.jpg" style="width:100%" display: block;"/>',
+                success: function (layero) {
+                    // 设置弹窗内容区域无滚动条
+                    $(layero).find('.layui-layer-content').css({
+                        'overflow': 'hidden',
+                        'padding': '0'
+                    });
+                }
+            });
+            return false;
+
+        }
+        else {
+
+            ChinaaetLogin.ShowLoginClose('请登录', function (data) {
+                if (data.isSuccess) {
+                    location.reload();
+                }
+            });
+
+        }
+    });
+</script>
+
+
+
+    
+
+
+<div style="margin:0 auto;display:none;">
+    <img src="//st.chinaaet.com/www/main/images/wx-aet.png" alt="《电子技术应用》" />
+</div>
+
+
+<section>
+    <div class="g-h">
+        <div class="main">
+            <div style="text-align: center">
+                <!-- 广告位：首页-A1(1170*100px) -->
+
+                <script type="text/javascript" src="//www.chinaaet.com/biz/9100000092"></script>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="g-h">
+        <div class="main">
+            <div style="text-align: center">
+                <!-- 广告位：首页-A2(1170*100px) -->
+                <script>
+            (function () {
+                var s = "_" + Math.random().toString(36).slice(2);
+                document.write('<div id="' + s + '"></div>');
+                (window.slotbydup = window.slotbydup || []).push({
+                    id: '8261668',
+                    container: s,
+                    size: '1170,100',
+                    display: 'inlay-fix'
+                });
+            })();
+        </script>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="main clear">
+        <div class="jj">
+            <div class="k1">
+                <ul>
+                        <li>
+                            <a href="/tt/q6ZZZf" target="_blank" rel="nofollow">&#x65B0;&#x578B;&#x50A8;&#x80FD;&#x6280;&#x672F;&#x4E13;&#x9898;</a>
+                        </li>
+                        <li>
+                            <a href="/tt/ryuYV3" target="_blank" rel="nofollow">AET&#x966A;&#x4F60;&#x8D70;&#x8FDB;&#x5DE5;&#x4E1A;&#x4EE5;&#x592A;&#x7F51;</a>
+                        </li>
+                        <li>
+                            <a href="/tt/3aYNbq" target="_blank" rel="nofollow">&#x70B9;&#x51FB;&#x4E86;&#x89E3;&#x56FD;&#x6709;&#x4F01;&#x4E1A;&#x6570;&#x5B57;&#x5316;&#x8F6C;&#x578B;&#x4E13;&#x9898;</a>
+                        </li>
+                        <li>
+                            <a href="/tt/ZJbqEf" target="_blank" rel="nofollow">&#x70B9;&#x51FB;&#x67E5;&#x770B;&#x57FA;&#x7840;&#x7535;&#x5B50;&#x6D4B;&#x8BD5;&#x6D4B;&#x91CF;&#x57F9;&#x8BAD;&#x89C6;&#x9891;</a>
+                        </li>
+                </ul>
+            </div>
+            <div class="k2">
+                <ul>
+                        <li>
+                            <a href="/tt/iYRzIn" target="_blank" rel="nofollow">&#x70B9;&#x51FB;&#x67E5;&#x770B;ChinaAET RISC-V&#x4E13;&#x9898;</a>
+                        </li>
+                        <li>
+                            <a href="/tt/Jz6FFj" target="_blank" rel="nofollow">&#x4EC0;&#x4E48;&#x662F;&#x6570;&#x5B57;&#x5316;&#x8F6C;&#x578B;&#xFF1F;</a>
+                        </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="g1 clear">
+        <div class="main">
+
+            <div class="crumb">
+                您所在的位置：<a href="/">首页</a>&nbsp;&gt;
+                <a href="/measurement/">&#x6D4B;&#x8BD5;&#x6D4B;&#x91CF;</a>&nbsp;&gt;
+                <a href="/tech/designapplication/">&#x8BBE;&#x8BA1;&#x5E94;&#x7528;</a>&nbsp;&gt;
+                <span>&#x57FA;&#x4E8E;&#x4E91;&#x5E73;&#x53F0;&#x7684;&#x975E;&#x4FB5;&#x5165;&#x5F0F;&#x8D1F;&#x8377;&#x76D1;&#x6D4B;&#x4E0E;&#x8BC6;&#x522B;&#x7CFB;&#x7EDF;</span>
+            </div>
+
+            <div class="gl">
+                <!-- 广告位：首页-C1(770*80px) -->
+
+                <script type="text/javascript" src="//www.chinaaet.com/biz/9100000095"></script>
+
+            </div>
+            <div class="gr">
+                <!-- 广告位：首页-E1(370*80px) -->
+
+                <script type="text/javascript" src="//www.chinaaet.com/biz/9100000106"></script>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+<div class="main clear">
+    <div class="f-l">
+        <article class="clear">
+            <div class="l2">
+                <div class="left f-l  ">
+                    <div class="clear">
+                        <div style="font-size:26px;font-weight: bold;line-height: 40px;color: #333;text-align:center;">
+                            &#x57FA;&#x4E8E;&#x4E91;&#x5E73;&#x53F0;&#x7684;&#x975E;&#x4FB5;&#x5165;&#x5F0F;&#x8D1F;&#x8377;&#x76D1;&#x6D4B;&#x4E0E;&#x8BC6;&#x522B;&#x7CFB;&#x7EDF;
+                        </div>
+                        <div style="float: right;">
+                            <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a>
+                            <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                            </div>
+                            <script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": ["weixin", "tsina", "qzone", "douban", "tieba", "sqq", "youdao", "evernotecn", "fbook", "twi"], "bdPic": "", "bdStyle": "1", "bdSize": "16" }, "share": {}, "image": { "viewList": ["weixin", "tsina", "qzone"], "viewText": "分享到：", "viewSize": "16" } }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = '/static/api/js/share.js'];</script>
+                        </div>
+                        <div style="color: #3d464d;font-size: 14px;font-weight: 400;line-height: 25px;text-align:center;">
+                                <div>2018&#x5E74;&#x7535;&#x5B50;&#x6280;&#x672F;&#x5E94;&#x7528;&#x7B2C;9&#x671F;</div>
+                                <div>&#x9648;&#x5F6D;&#x946B;1&#xFF0C;&#x4EF2;&#x601D;&#x4E1C;1&#xFF0C;2</div>
+                                <div>1.&#x6B66;&#x6C49;&#x5927;&#x5B66; &#x7535;&#x5B50;&#x4FE1;&#x606F;&#x5B66;&#x9662;&#xFF0C;&#x6E56;&#x5317; &#x6B66;&#x6C49;430079&#xFF1B;2.&#x6B66;&#x6C49;&#x5927;&#x5B66; &#x6D4B;&#x7ED8;&#x9065;&#x611F;&#x4FE1;&#x606F;&#x5DE5;&#x7A0B;&#x56FD;&#x5BB6;&#x91CD;&#x70B9;&#x5B9E;&#x9A8C;&#x5BA4;&#xFF0C;&#x6E56;&#x5317; &#x6B66;&#x6C49;430079</div>
+                        </div>
+                        <div style="color: #3d464d;font-size: 16px;font-weight: 400;line-height: 30px;text-align:left;margin-top:20px;">
+                            <strong>摘要：</strong> &#x4E3A;&#x4E86;&#x5B9E;&#x65F6;&#x8FDC;&#x7A0B;&#x5730;&#x76D1;&#x6D4B;&#x8D1F;&#x8377;&#x8FD0;&#x8F6C;&#x72B6;&#x6001;&#x548C;&#x8BC6;&#x522B;&#x8D1F;&#x8377;&#x79CD;&#x7C7B;&#xFF0C;&#x8BBE;&#x8BA1;&#x4E86;&#x4E00;&#x79CD;&#x975E;&#x4FB5;&#x5165;&#x5F0F;&#x8D1F;&#x8377;&#x76D1;&#x6D4B;&#x7CFB;&#x7EDF;&#xFF0C;&#x5E76;&#x7814;&#x7A76;&#x57FA;&#x4E8E;PCA&#x548C;kNN&#x7684;&#x8D1F;&#x8377;&#x8BC6;&#x522B;&#x7B97;&#x6CD5;&#x3002;&#x5728;&#x7535;&#x529B;&#x4F9B;&#x7ED9;&#x5165;&#x53E3;&#x7AEF;&#xFF0C;&#x901A;&#x8FC7;&#x5728;&#x8D1F;&#x8377;&#x56DE;&#x8DEF;&#x4E2D;&#x4E32;&#x8054;&#x5EB7;&#x94DC;&#x7535;&#x963B;&#x91C7;&#x6837;&#x5DE5;&#x4F5C;&#x7535;&#x6D41;&#xFF0C;&#x901A;&#x8FC7;&#x7535;&#x963B;&#x5206;&#x538B;&#x7F51;&#x7EDC;&#x91C7;&#x6837;&#x5DE5;&#x4F5C;&#x7535;&#x538B;&#xFF0C;&#x5E76;&#x8BA1;&#x7B97;&#x8D1F;&#x8377;&#x7684;&#x5B9E;&#x65F6;&#x6709;&#x529F;&#x529F;&#x7387;&#xFF0C;&#x4EE5;1 Hz&#x9891;&#x7387;&#x5411;&#x4E91;&#x670D;&#x52A1;&#x5668;&#x53D1;&#x9001;&#x529F;&#x7387;&#x4FE1;&#x606F;&#x3002;&#x5728;&#x4E91;&#x670D;&#x52A1;&#x5668;&#x7AEF;&#xFF0C;&#x901A;&#x8FC7;PCA&#x5BF9;&#x529F;&#x7387;&#x503C;&#x5E8F;&#x5217;&#x8FDB;&#x884C;&#x7279;&#x5F81;&#x63D0;&#x53D6;&#x548C;&#x964D;&#x7EF4;&#xFF0C;&#x901A;&#x8FC7;kNN&#x5BF9;&#x5F53;&#x524D;&#x63A5;&#x5165;&#x7684;&#x8D1F;&#x8377;&#x8FDB;&#x884C;&#x5F52;&#x7C7B;&#xFF0C;&#x7528;&#x6237;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x7EC8;&#x7AEF;&#x8BBE;&#x5907;&#x8BBF;&#x95EE;&#x8D1F;&#x8377;&#x76D1;&#x63A7;&#x754C;&#x9762;&#x3002;&#x5728;&#x5B9E;&#x9A8C;&#x4E2D;&#xFF0C;&#x5C06;&#x7CFB;&#x7EDF;&#x5B89;&#x88C5;&#x4E8E;&#x5899;&#x58C1;&#x63D2;&#x5EA7;&#x4E0A;&#xFF0C;&#x5BF9;8&#x7C7B;&#x5BB6;&#x7528;&#x8D1F;&#x8377;&#x8FDB;&#x884C;&#x76D1;&#x63A7;&#x548C;&#x8BC6;&#x522B;&#xFF0C;&#x591A;&#x6B21;&#x5B9E;&#x9A8C;&#x7ED3;&#x679C;&#x663E;&#x793A;&#x8D1F;&#x8377;&#x5E73;&#x5747;&#x8BC6;&#x522B;&#x7387;&#x8FBE;&#x5230;98%&#x4EE5;&#x4E0A;&#xFF0C;&#x9A8C;&#x8BC1;&#x4E86;&#x8BE5;&#x65B9;&#x6848;&#x7684;&#x51C6;&#x786E;&#x6027;&#x548C;&#x53EF;&#x884C;&#x6027;&#x3002;
+                        </div>
+                    </div>
+                    <div>
+                        <div class="import clear" style="margin:10px 0px;">
+                            <strong style="float: left;line-height: 40px;font-size: 14px">关键词：</strong>
+                                    <a href="/tags/&#x975E;&#x4FB5;&#x5165;&#x5F0F;" target="_blank">&#x975E;&#x4FB5;&#x5165;&#x5F0F;</a>
+                                    <a href="/tags/&#x529F;&#x7387;&#x8BA1;&#x91CF;" target="_blank">&#x529F;&#x7387;&#x8BA1;&#x91CF;</a>
+                                    <a href="/tags/&#x8D1F;&#x8377;&#x8BC6;&#x522B;" target="_blank">&#x8D1F;&#x8377;&#x8BC6;&#x522B;</a>
+                                    <a href="/tags/&#x4E91;&#x670D;&#x52A1;&#x5668;" target="_blank">&#x4E91;&#x670D;&#x52A1;&#x5668;</a>
+                                    <a href="/tags/pca" target="_blank">PCA</a>
+                        </div>
+                    </div>
+
+                    <div style="color: #3d464d;font-size: 14px;font-weight: 400;line-height: 25px;text-align:left;">
+                        <strong>中图分类号：</strong> TN98<br><strong>文献标识码：</strong> A<br><strong>DOI：</strong>10.16157/j.issn.0258-7998.180615<br><strong>中文引用格式：</strong> 陈彭鑫，仲思东. 基于云平台的非侵入式负荷监测与识别系统[J].电子技术应用，2018，44(9)：91-95.<br><strong>英文引用格式：</strong> Chen Pengxin，Zhong Sidong. A non-intrusive load monitoring and identification system based on cloud platform[J]. Application of Electronic Technique，2018，44(9)：91-95.
+                    </div>
+
+                    <div style="font-size:26px;font-weight: bold;line-height: 36px;color: #333;text-align:center;">
+                        A non-intrusive load monitoring and identification system based on cloud platform
+                    </div>
+                    <div style="color: #3d464d;font-size: 14px;font-weight: 400;line-height: 25px;text-align:center;">
+                            <div>Chen Pengxin1&#xFF0C;Zhong Sidong1&#xFF0C;2</div>
+                            <div>1.School of Electronic Information&#xFF0C;Wuhan University&#xFF0C;Wuhan 430079&#xFF0C;China&#xFF1B; 2.National Key Laboratory of Surveying and Mapping of Remote Sensing Information Engineering&#xFF0C;Wuhan University&#xFF0C; Wuhan 430079&#xFF0C;China</div>
+                    </div>
+                    <div style="color: #3d464d;font-size: 14px;font-weight: 400;line-height: 25px;text-align:left;">
+                        <strong>Abstract：</strong> In order to monitor the load&#x2032;s running condition and identify the load&#x2032;s type in real time and long distance, a non-intrusive load monitoring system and a load identification algorithm based on PCA and kNN are designed and developed. On the side of power supply inlet, operating current is sampled through putting a series constantan resistor in the load circuit and operating voltage is sampled through a resistive subdivision network. Thus the load&#x2032;s real-time active power is calculated and uploaded to the cloud server on the frequency of 1 Hz. On the side of cloud server, features extraction and dimensionality reduction are processed by PCA. The running load is classified by kNN. Users can visit the load monitoring interface by terminal devices. In the experiments, the system is installed in the wall socket to monitor and identify eight types of household appliances. Multiple experimental results show that the average rate of identification is above 98%, which verifies that the method proposed is accurate and feasible.
+                    </div>
+                        <div style="color: #3d464d;font-size: 14px;font-weight: 400;line-height: 25px;text-align:left;">
+                            <strong>Key words :</strong> non-intrusive&#xFF1B;power measurement&#xFF1B;load identification&#xFF1B;cloud server&#xFF1B;PCA&#xFF1B;kNN
+                        </div>
+                    <div class="content">
+                        <p><strong>0 引言</strong></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;电能是现代生产生活中应用最广泛、最重要的能源之一。在电能计量方面，传统的“一户一表”方式是由电力部门抄取电能表并给出当月耗电度数，其弊端在于用户无法获知具体某用电器在某时间段内的耗电情况。可以说，用户对负荷集的动态实时运行信息的掌握还相当匮乏。为解决此问题，传统的侵入式监测方式在每个待测负荷上加装功率测量硬件，“一对一”地监测负荷运行信息，缺点是需要破坏负荷原有的供电电路，在安装、维护上将耗费大量的人力物力<sup>[1]</sup>。</p><p>	&nbsp;&nbsp;&nbsp;&nbsp;<a class="innerlink" href="http://www.chinaaet.com/tags/非侵入式" title="非侵入式" target="_blank">非侵入式</a>负荷监测系统(Non-intrusive Load Monitoring System，NILMS)是在电力供给入口处安装功率测量硬件，无需破坏负荷硬件结构，可以“一对多”地监控负荷运转状态<sup>[2]</sup>。但由于缺乏当前所接入负荷的种类先验信息，故随之而来的是负荷种类识别的问题。对此，国内外众多学者进行了相关研究，尤其是借助神经网络进行<a class="innerlink" href="http://www.chinaaet.com/tags/负荷识别" title="负荷识别" target="_blank">负荷识别</a><sup>[3-5]</sup>。郑宇等以有功功率增量和电流谐波分量总面积作为特征量，利用Hopfield神经网络实现负荷识别<sup>[6]</sup>；Jiang Lei等以负荷电流谐波作为特征量，利用SVM方法进行负荷分类<sup>[7]</sup>。</p><p>	&nbsp;&nbsp;&nbsp;&nbsp;本文从工程应用的角度出发，设计了一种软硬件兼备的非侵入式监测与识别系统。设计了电源管理电路、<a class="innerlink" href="http://www.chinaaet.com/tags/功率计量" title="功率计量" target="_blank">功率计量</a>电路等，通过Wi-Fi向<a class="innerlink" href="http://www.chinaaet.com/tags/云服务器" title="云服务器" target="_blank">云服务器</a>上传负荷的实时功率信息，云服务器可以根据预先训练好的分类器识别当前负荷种类，实现负荷的分类计量；提出利用主成份分析法(<a class="innerlink" href="http://www.chinaaet.com/tags/PCA" title="PCA" target="_blank">PCA</a>)对负荷的特征量进行降维提取，利用k最近邻(kNN)算法识别用电器种类。与传统技术相比，本系统能够以非侵入方式采集负荷功率信息，减少安装和维护的工作量；借助云服务器识别负荷、分析运行状态，可以远程控制负荷开关，从而指导用户合理规划用电，实现节能减排；及时排除故障，保障人身安全，减少财产损失，是智能电网发展的必然趋势。</p><p><strong>1 系统结构</strong></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;非侵入式负荷监测与识别系统由分布式硬件节点、路由器、云服务器和智能终端组成，如图1所示。其中，分布式硬件节点布设在各电力供给入口处采集负荷的功率信息，每个节点上都带有Wi-Fi芯片用于连接路由器；路由器将各节点的功率信息通过因特网转发至云服务器；云服务器上保存有各个节点上不同负荷的历史耗电记录，并根据训练好的分类器识别当前运转的负载，同时向用户提供访问接口；用户可以通过智能终端联网查看各电力供给入口的负荷运行状态，发送电路控制指令。</p><p style="text-align: center;"><img src="http://files.chinaaet.com/images/2018/09/25/6367346742221580593613047.gif" title="ck4-t1.gif" alt="ck4-t1.gif" width="398" height="220"/></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;如图2所示，硬件节点是一个完整的功率测量系统。当负荷接入电力供给入口时，功率计量电路采集负荷的电压、电流有效值并转换为随交流电浮动的高频脉冲信号；通过光电耦合器将高频脉冲信号与交流电隔离后，CPLD用“等精度测量”的方法对高频脉冲计数；MCU获得脉冲频率后，解算出功率值并通过Wi-Fi发送到云服务器。另外，当硬件节点收到由云服务器传来的控制指令时，由MCU控制继电器通断。</p><p style="text-align: center;"><img src="http://files.chinaaet.com/images/2018/09/25/6367346744012197954533752.gif" title="ck4-t2.gif" alt="ck4-t2.gif" width="440" height="188"/></p><p><strong>2 硬件节点端电路设计</strong></p><p><strong>2.1 电源管理电路</strong></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;自激隔离式开关电源用于给光耦、CPLD、MCU、继电器和Wi-Fi芯片供电，如图3所示。其中，单相工频市电经半波整流后加到三极管Q2上，Q2起到开关的作用。当Q2微导通时，变压器初级绕组L1和L2将产生相反方向的感应电动势；当Q2处于饱和状态时，L1中电流近似线性增加，L2中产生的稳定电动势给电容C2充电；当Q2处于截止状态时，L1和L2中的感应电动势极性反转，最终形成自激振荡。在副级电路中，通过二极管D2和电解电容C4进行稳压滤波。</p><p style="text-align: center;"><img src="http://files.chinaaet.com/images/2018/09/25/6367346747743431992624119.gif" title="ck4-t3.gif" alt="ck4-t3.gif" width="502" height="380"/></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;图4所示电路可以提供5 V、200 mA的非隔离式电源，用于给功率计量芯片HLW8012供电。MP150是一款原边整流器，可以实现精确的恒压调节功能。单相工频市电经整流、滤波和稳压后获得5 V压差，由于模拟地与零线N相连，因此该5 V压差随交流零线浮动。弱电区通过自激隔离式电源供电，强电区通过非隔离式电源供电，避免了220 V交流电窜入弱电区，增加系统的可靠性。</p><p style="text-align: center;"><img src="http://files.chinaaet.com/images/2018/09/25/6367346749737173534518908.gif" title="ck4-t4.gif" alt="ck4-t4.gif" width="600" height="269"/></p><p><strong>2.2 功率计量电路</strong></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;负荷的实时用功功率计量电路如图5所示，HLW8012是一款单相功率计量芯片，满足50/60 Hz IEC 687/1036准确度要求标准。L_Relay为经过继电器的火线，N为零线。通过在负荷回路中串联2 mΩ的康铜电阻RS采样工作电流，通过电阻网络R5~R9采集工作电压。将采样电压经压频转换后，输出表征电压、电流有效值和有功功率的高频脉冲信号CF和CF1。</p><p style="text-align: center;"><img src="http://files.chinaaet.com/images/2018/09/25/6367346753037159455996287.gif" title="ck4-t5.gif" alt="ck4-t5.gif" width="493" height="351"/></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;利用“等精度”的方法测量高频脉冲频率。图6所示为CPLD搭建的等精度测频数字逻辑电路，其中，标准信号为50 MHz晶振信号，闸门信号设置为宽度为1 s的脉冲，D触发器捕获到待测信号的边沿时，闸门信号才会被锁存到输出端，32位标准信号计数器和待测信号计数器同时被使能并开始计数，故待测信号计数器不会出现±1个计数值的误差。1 s计数结束后，D触发器锁存闸门信号的下降沿，同时读取计数器数值，并通过式(1)计算待测信号的频率fdc，bz_count[31..0]和dc_count[31..0]分别存储了闸门时间内标准信号和待测信号的上升沿个数。</p><p style="text-align: center;"><img src="http://files.chinaaet.com/images/2018/09/25/6367346755355899519985789.gif" title="ck4-t6.gif" alt="ck4-t6.gif" width="406" height="239"/></p><p>&nbsp;&nbsp;&nbsp;&nbsp;	<img src="http://files.chinaaet.com/images/2018/09/25/6367346756780893438015750.gif" title="ck4-gs1-2.gif" alt="ck4-gs1-2.gif"/></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;有功功率的输出频率F<sub>CF</sub>、电流有效值的输出频率F<sub>CFI</sub>和电压有效值的输出频率F<sub>CFU</sub>可由式(2)计算，其中V<sub>1</sub>是电流通道引脚上的电压信号，V<sub>2</sub>是电压通道引脚上的电压信号，f<sub>osc</sub>为3.579 MHz的振荡器频率，V<sub>REF</sub>为2.43 V的基准电压源。实测出输出频率后，即可反推出电流、电压有效值和有功功率值。</p><p><strong>2.3 光耦隔离电路</strong></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;光耦隔离电路的作用是将功率计量电路输出的高频脉冲转换为3.3 V电平标准的数字脉冲并与强电区域隔离，隔离后的脉冲由CPLD计数。如图7所示，HCPL-0630是双通道光耦芯片，开关速度可达到10 Mb/s。来自HLW8012的高频脉冲CF和CF1连接铝砷化镓发光二极管的阴极，输出端CF_IO和CF1_IO作为待测信号连接图6所示的测频逻辑电路。当二极管发光时，右侧三极管导通，输出低电平；反之，三极管截止，输出高电平。</p><p style="text-align: center;"><img src="http://files.chinaaet.com/images/2018/09/25/6367346845814947773509151.gif" title="ck4-t7.gif" alt="ck4-t7.gif" width="478" height="206"/></p><p><strong>2.4 Wi-Fi、继电器电路</strong></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;系统通过图8所示的Wi-Fi电路与云服务器实现TCP/IP通信。云服务器收到终端发出的控制指令后，将指令按硬件编号转发到各节点上。节点通过Wi-Fi电路接收到开关指令，通过图9所示的继电器电路控制负荷与电力入口连通或断开。R_IO由MCU控制其电平状态，继电器RY1串联在三极管Q0的集电极，当R_IO为低电平时，三极管Q0截止，继电器处于常开状态；当R_IO置高时，三极管Q0导通，继电器吸合。</p><p style="text-align: center;"><img src="http://files.chinaaet.com/images/2018/09/25/6367346848208687694121614.gif" title="ck4-t8+t9.gif" alt="ck4-t8+t9.gif" width="536" height="241"/></p><p><strong>3 云服务器端数据处理方法</strong></p><p><strong>3.1 基于PCA的特征提取与降维</strong></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;对于一个电力供给入口来说，总存在若干个经常接入使用的电负荷，既然系统已经能够获取负荷随时间变化的功率值，那么在已知“功率-时间”波形图的基础上，可以对波形图进行特征提取和降维，得到一组可以鉴别负荷种类的特征向量。具体方法为：采集n类负荷在1 min内的功率数据作为训练样本，提取功率值序列的平均数、中位数、众数、方差、极差、峰度、偏度、四分位差、正斜率均值和负斜率均值等共10种基本统量，得到n类负荷的样本数据矩阵x<sub>n×10</sub>。其中，正、负斜率均值分别指将离散功率值序列作差分运算后的正数集的平均数和负数集的平均数。考虑到特征量维数较多且相互之间具有一定的相关性，采用主成分分析(Principal Components Analysis，PCA)，通过正交变换将基本统计量降维成相互独立的综合指标<sup>[8]</sup>。</p><p><img src="http://files.chinaaet.com/images/2018/09/25/6367346854646160133291789.gif" title="ck4-gs3-5.gif" alt="ck4-gs3-5.gif"/></p><p><strong>3.2 基于kNN的负荷分类</strong></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;k最近邻(k-NearestNeighbor，kNN)分类算法的核心思想是“投票机制”。将一个测试样本投放到众多已分类好的训练样本中，分别计算该测试样本与各训练样本的欧式距离来作为相似性指标<sup>[9]</sup>。本方案中，欧式空间的维度为经过PCA降维后的综合特征量的个数。</p><p><strong>4 采集端和云端流程图</strong></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;采集端MCU的程序流程如图10所示。首先初始化时钟、串口、定时器等片内外设。再通过AirKiss协议配置Wi-Fi模块所接入无线网的SSID和密码，成功连接路由器后被分配IP地址。接着，CPLD对功率计量电路产生的高频脉冲计数，MCU读取CPLD的计数值，并根据式(2)解算出负荷功率值。采集端在与服务器进行通信的过程中，一方面向服务器传递实时功率信息，另一方面接收服务器下达的开关指令，从而控制继电器通断。</p><p>	&nbsp;&nbsp;&nbsp;&nbsp;云服务器端程序流程如图11所示，首先通过TCP/IP协议接收负荷的编号与功率信息，再利用PCA对1 min内的功率值序列进行特征提取与降维，接着通过kNN分类实现负荷识别。云端既可以转发客户端提出的关断请求，也可以根据异常的功率值判断电路故障，从而自主地下达关断指令。&nbsp;</p><p style="text-align: center;"><img src="http://files.chinaaet.com/images/2018/09/25/6367346859199265719166494.gif" title="ck4-t10-11.gif" alt="ck4-t10-11.gif" width="489" height="405"/></p><p><strong>5 实验</strong></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;将本系统安装于室内墙壁插座内，选择手机充电器、平板充电器、台灯、笔记本电脑、电风扇、洗衣机、电吹风机和电水壶共8类常用家用电器作为实验负荷。配置硬件Wi-Fi模块接入家庭路由器，建立其与云服务器的通信。</p><p>	&nbsp;&nbsp;&nbsp;&nbsp;(1)分别对处于正常运行状态的8类实验负荷采集60 s的有功功率数据，图12所示为各负荷的“功率-时间”变化图，可以看出8类负荷有着不同的波形特征。</p><p style="text-align: center;"><img src="http://files.chinaaet.com/images/2018/09/25/6367346862311752431726378.gif" title="ck4-t12.gif" alt="ck4-t12.gif" width="522" height="645"/></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;(2)为了定量分析8类实验负荷的波形特征，对步骤(1)所采集的有功功率值序列求取3.1节所述的10种基本统计量。</p><p>	&nbsp;&nbsp;&nbsp;&nbsp;(3)为了消除10种基本统计量的相关性，降低特征维度，利用式(3)～式(5)进行主成分变换。结果如表1所示，取前3个主成分，可以获得99.83%的累积贡献率，说明前3个主成分包含了原指标的99.83%的信息，且相互独立。</p><p style="text-align: center;"><img src="http://files.chinaaet.com/images/2018/09/25/6367346865433614068660969.gif" title="ck4-b1.gif" alt="ck4-b1.gif" width="463" height="147"/></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;(4)利用3.2节所述的分类方法，以步骤(3)所求得的主成分作为欧式维度，计算待识别样本到其他训练样本之间的欧式距离，并利用kNN算法进行归类。识别准确率如表2所示，可以看出，平板充电器、台灯和笔记本3类负荷均有未识别出的次数，是因为这三者的功率平均数较为相似，且平板充电器和笔记本充电器的充电电流与环境温度及是否正在使用等因素有关。整体看来，平均识别准确率达到98.75%。</p><p style="text-align: center;"><img src="http://files.chinaaet.com/images/2018/09/25/6367346867661729606107717.gif" title="ck4-b2.gif" alt="ck4-b2.gif" width="459" height="301"/></p><p><strong>6 结束语</strong></p><p>	&nbsp;&nbsp;&nbsp;&nbsp;NILMS通过在电力入口处布设硬件节点，实现了“一个入口，多种负荷”的监测系统。这对于电力系统而言，不仅降低了安装维护的费用，更简化了监控系统，便于管理，但与之同来的是负荷种类识别的高效性与准确性问题。本文主要完成了两项工作：(1)设计并研制出非侵入式负荷功率采集装置，全天候地向云服务器上传负荷功率信息，并对强电区域和弱电区域进行电气隔离，增加硬件节点的可靠性；(2)借助云服务器平台实现负荷种类识别功能，预先通过PCA对常用负荷的功率值序列进行训练，达到特征提取与降维的目的，再利用kNN对待识别样本进行归类，经多次实验，显示负荷识别率可以达到98%以上。总体而言，本系统具有非侵入式测量和网络远程控制的特点，又借助云服务器识别负荷、分析运行状态，从而指导用户合理规划用电，实现节能减排，并及时排除故障，是智能电网发展的必然趋势。</p><p><strong>参考文献</strong></p><p>[1] 刘然.结合改进最近邻法与支持向量机的住宅用电负荷识别研究[D].重庆：重庆大学，2014.</p><p>[2] 牛卢璐，贾宏杰.一种适用于非侵入式负荷监测的暂态事件检测算法[J].电力系统自动化，2011，35(9)：30-35.</p><p>[3] WELIKALA S，DINESH C，GODALIYADDA R I，et al.Robust non-intrusive load monitoring(NILM) with unknown loads[C].IEEE International Conference on Information and Automation for Sustainability.IEEE，2017：1-6.</p><p>[4] ZHOU C，LIU S，LIU P.Neural network pattern recognition based non-intrusive load monitoring for a residential energy management system[C].International Conference on Information Science and Control Engineering.IEEE，2016：483-487.</p><p>[5] 李如意，王晓换，胡美璇，等.RPROP神经网络在非侵入式负荷分解中的应用[J].电力系统保护与控制，2016，44(7)：55-61.</p><p>[6] 郑宇.神经网络在学生公寓用电负荷识别中的应用研究[D].重庆：重庆大学，2007.</p><p>[7] Jiang Lei，Luo Suhuai，Li Jiaming.An approach of household power appliance monitoring based on machine learning[C].International Conference on Intelligent Computation Technology &amp; Automation.IEEE，2012：577-580.</p><p>[8] 高云，杨洪耕.基于暂态特征贴近度匹配的家用负荷识别[J].电力系统自动化，2013，37(9)：54-59.</p><p>[9] 李蓉，叶世伟，史忠植.SVM-KNN分类器——一种提高SVM分类精度的新方法[J].电子学报，2002，30(5)：745-748.</p><p><br/></p><p><br/></p><p><strong>作者信息:</strong></p><p>陈彭鑫1，仲思东1，2</p><p>（1.武汉大学 电子信息学院，湖北 武汉430079；2.武汉大学 测绘遥感信息工程国家重点实验室，湖北 武汉430079）</p>
+                    </div>
+                    
+                    <div class="clear">
+                    </div>
+
+                    <div class="clear">
+                            <div style="font-size:14px;line-height:25px;margin: 10px 0px;"><label style="font-weight:bold;color:#F8132A">原创声明：</label>此内容为AET网站原创，未经授权禁止转载。</div>
+                    </div>
+
+                    <div class="row" style="margin-top:15px;">
+                        <!-- 广告位：博客首页-C1(770*80px) -->
+                    </div>
+
+                </div>
+            </div>
+        </article>
+        <div class="l2 clear">
+            <div class="jj">
+                <div class="k1">
+                    <ul>
+                            <li>
+                                <a href="/tt/q6zY7j" target="_blank" rel="nofollow">&#x6B22;&#x8FCE;&#x67E5;&#x770B;AET-ChatGPT&#x4E13;&#x9898;</a>
+                            </li>
+                            <li>
+                                <a href="/tt/JNFzqm" target="_blank" rel="nofollow">2026&#x7B2C;&#x4E8C;&#x5C4A;&#x6570;&#x636E;&#x8981;&#x7D20;&#x6CBB;&#x7406;&#x5B66;&#x672F;&#x7814;&#x8BA8;&#x4F1A;</a>
+                            </li>
+                            <li>
+                                <a href="/tt/JNzQb2" target="_blank" rel="nofollow">&#x70B9;&#x51FB;&#x8FDB;&#x5165;&#x5FC6;&#x963B;&#x5668;&#x4E8C;&#x6781;&#x7BA1;/&#x4E09;&#x6781;&#x7BA1;/&#x573A;&#x6548;&#x5E94;&#x7BA1;&#x6D4B;&#x8BD5;&#x4E13;&#x9898;</a>
+                            </li>
+                            <li>
+                                <a href="/tt/AF3qqy" target="_blank" rel="nofollow">&#x70B9;&#x51FB;&#x8FDB;&#x5165;&#x7535;&#x963B;/&#x7535;&#x5BB9;/&#x7535;&#x611F;&#x6D4B;&#x8BD5;&#x4E13;&#x9898;</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="l2 clear">
+            
+
+
+
+
+
+
+
+<div class="more1 jj">
+    <h3>相关内容</h3>
+</div>
+<div class="more2">
+    <ul>
+            <li><a href="/article/3000090589" title="&#x57FA;&#x4E8E;&#x4E91;&#x5E73;&#x53F0;&#x7684;&#x975E;&#x4FB5;&#x5165;&#x5F0F;&#x8D1F;&#x8377;&#x76D1;&#x6D4B;&#x4E0E;&#x8BC6;&#x522B;&#x7CFB;&#x7EDF;" target="_blank">&#x57FA;&#x4E8E;&#x4E91;&#x5E73;&#x53F0;&#x7684;&#x975E;&#x4FB5;&#x5165;&#x5F0F;&#x8D1F;&#x8377;&#x76D1;&#x6D4B;&#x4E0E;&#x8BC6;&#x522B;&#x7CFB;&#x7EDF;</a></li>
+    </ul>
+</div>
+
+
+
+
+
+    <hr style="border: 1px dashed #eee;margin-top:35px;" />
+    <div class="more2">
+        <ul>
+                <li><a href="/article/3000090589" title="&#x57FA;&#x4E8E;&#x4E91;&#x5E73;&#x53F0;&#x7684;&#x975E;&#x4FB5;&#x5165;&#x5F0F;&#x8D1F;&#x8377;&#x76D1;&#x6D4B;&#x4E0E;&#x8BC6;&#x522B;&#x7CFB;&#x7EDF;" target="_blank">&#x57FA;&#x4E8E;&#x4E91;&#x5E73;&#x53F0;&#x7684;&#x975E;&#x4FB5;&#x5165;&#x5F0F;&#x8D1F;&#x8377;&#x76D1;&#x6D4B;&#x4E0E;&#x8BC6;&#x522B;&#x7CFB;&#x7EDF;</a></li>
+        </ul>
+    </div>
+        </div>
+
+
+    </div>
+    <div class="f-r">
+        <aside>
+
+
+            <div class="g2 clear">
+                <div class="g1-r" style="margin-top: 15px;text-align:center;">
+                    <!-- 广告位：首页-E2(370*216px) -->
+
+
+                    <script type="text/javascript" src="//www.chinaaet.com/biz/9100000107"></script>
+
+                </div>
+            </div>
+
+
+            
+
+
+
+
+<div class="aside">
+    <div class="kx clear">
+        <h3>
+            <a href="/news/active">活动</a>
+        </h3>
+        <h6><a href="/news/active">MORE</a></h6>
+    </div>
+    <ul>
+            <li><a href="/article/3000177489" title="&#x5F81;&#x6587;&#x542F;&#x4E8B;&#xFF1A;2026&#x7535;&#x5B50;&#x4FE1;&#x606F;&#x5DE5;&#x7A0B;&#x5B66;&#x672F;&#x7814;&#x8BA8;&#x4F1A;&#xFF08;&#x96C6;&#x6210;&#x7535;&#x8DEF;&#x5E94;&#x7528;&#x6742;&#x5FD7;&#xFF09;" target="_blank">&#x5F81;&#x6587;&#x542F;&#x4E8B;&#xFF1A;2026&#x7535;&#x5B50;&#x4FE1;&#x606F;&#x5DE5;&#x7A0B;&#x5B66;&#x672F;&#x7814;&#x8BA8;&#x4F1A;&#xFF08;&#x96C6;&#x6210;&#x7535;&#x8DEF;&#x5E94;&#x7528;&#x6742;&#x5FD7;&#xFF09;</a></li>
+            <li><a href="/article/3000177423" title="&#x76F4;&#x64AD;&#x9884;&#x544A;&#xFF5C;&#x9632;&#x706B;&#x5899;&#x7684;&#x8FC7;&#x53BB;&#x3001;&#x73B0;&#x5728;&#x4E0E;&#x672A;&#x6765;" target="_blank">&#x76F4;&#x64AD;&#x9884;&#x544A;&#xFF5C;&#x9632;&#x706B;&#x5899;&#x7684;&#x8FC7;&#x53BB;&#x3001;&#x73B0;&#x5728;&#x4E0E;&#x672A;&#x6765;</a></li>
+            <li><a href="/article/3000177401" title="2026 &#x963F;&#x91CC;&#x4E91; Data&#x2B;AI &#x5DE5;&#x7A0B;&#x5E08;&#x5168;&#x7403;&#x6311;&#x6218;&#x8D5B;&#x5706;&#x6EE1;&#x6536;&#x5B98;" target="_blank">2026 &#x963F;&#x91CC;&#x4E91; Data&#x2B;AI &#x5DE5;&#x7A0B;&#x5E08;&#x5168;&#x7403;&#x6311;&#x6218;&#x8D5B;&#x5706;&#x6EE1;&#x6536;&#x5B98;</a></li>
+            <li><a href="/article/3000177293" title="&#x3010;&#x70ED;&#x95E8;&#x6D3B;&#x52A8;&#x3011;2026&#x4E2D;&#x56FD;&#x897F;&#x90E8;&#x5FAE;&#x6CE2;&#x5C04;&#x9891;&#x6280;&#x672F;&#x7814;&#x8BA8;&#x4F1A;" target="_blank">&#x3010;&#x70ED;&#x95E8;&#x6D3B;&#x52A8;&#x3011;2026&#x4E2D;&#x56FD;&#x897F;&#x90E8;&#x5FAE;&#x6CE2;&#x5C04;&#x9891;&#x6280;&#x672F;&#x7814;&#x8BA8;&#x4F1A;</a></li>
+            <li><a href="/article/3000177048" title="&#x201C;&#x6C7D;&#x8F66;&#x7535;&#x5B50;&#xB7;2026&#x5E74;&#x5EA6;&#x91D1;&#x82AF;&#x5956;&#x201D;&#x7F51;&#x7EDC;&#x6295;&#x7968;&#x901A;&#x9053;&#x6B63;&#x5F0F;&#x5F00;&#x542F;&#xFF01;" target="_blank">&#x201C;&#x6C7D;&#x8F66;&#x7535;&#x5B50;&#xB7;2026&#x5E74;&#x5EA6;&#x91D1;&#x82AF;&#x5956;&#x201D;&#x7F51;&#x7EDC;&#x6295;&#x7968;&#x901A;&#x9053;&#x6B63;&#x5F0F;&#x5F00;&#x542F;&#xFF01;</a></li>
+    </ul>
+</div>
+
+
+
+
+            <div class="g2 clear">
+                <div class="g1-r" style="margin-top: 15px;text-align:center;">
+                    <!-- 广告位：首页-E2(370*216px) -->
+
+
+                    <script type="text/javascript" src="//www.chinaaet.com/biz/9100000108"></script>
+
+                </div>
+            </div>
+
+            
+
+
+
+
+<div class="kx-bg">
+    <div class="kx clear">
+        <h3>
+            <a href="/news/interview/">高层说</a>
+        </h3>
+        <h6><a href="/news/interview/">MORE</a></h6>
+    </div>
+    <div class="nr-daitu">
+        <ul>
+                <li class="clear">
+                    <div class="fl">
+                        <a href="/article/3000177429" title="&#x4ECE; FactoryView&#xFF08;&#x8FD0;&#x8425;&#x53EF;&#x89C6;&#x5316;&#xFF09;&#x8FC8;&#x5411;&#x667A;&#x80FD;&#x51B3;&#x7B56;&#x652F;&#x6301;" target="_blank">
+                            <img src="https://img.chinaaet.com/images/2026/04/28/6391299782472594654854226.jpg" width="100" height="75" alt="&#x4ECE; FactoryView&#xFF08;&#x8FD0;&#x8425;&#x53EF;&#x89C6;&#x5316;&#xFF09;&#x8FC8;&#x5411;&#x667A;&#x80FD;&#x51B3;&#x7B56;&#x652F;&#x6301;">
+                        </a>
+                    </div>
+                    <div class="fr">
+                        <a href="/article/3000177429" title="&#x4ECE; FactoryView&#xFF08;&#x8FD0;&#x8425;&#x53EF;&#x89C6;&#x5316;&#xFF09;&#x8FC8;&#x5411;&#x667A;&#x80FD;&#x51B3;&#x7B56;&#x652F;&#x6301;" target="_blank">
+                            &#x4ECE; FactoryView&#xFF08;&#x8FD0;&#x8425;&#x53EF;&#x89C6;&#x5316;&#xFF09;&#x8FC8;&#x5411;&#x667A;&#x80FD;&#x51B3;&#x7B56;&#x652F;&#x6301;
+                        </a>
+                    </div>
+                </li>
+                <li class="clear">
+                    <div class="fl">
+                        <a href="/article/3000177382" title="2026&#x5E74;&#xFF0C;&#x5851;&#x9020;&#x4E0B;&#x4E00;&#x6CE2;EDA&#x521B;&#x65B0;&#x6D6A;&#x6F6E;&#x7684;&#x5173;&#x952E;&#x8D8B;&#x52BF;" target="_blank">
+                            <img src="//img.chinaaet.com/images/2026/04/24/20260424161749-98788.png" width="100" height="75" alt="2026&#x5E74;&#xFF0C;&#x5851;&#x9020;&#x4E0B;&#x4E00;&#x6CE2;EDA&#x521B;&#x65B0;&#x6D6A;&#x6F6E;&#x7684;&#x5173;&#x952E;&#x8D8B;&#x52BF;">
+                        </a>
+                    </div>
+                    <div class="fr">
+                        <a href="/article/3000177382" title="2026&#x5E74;&#xFF0C;&#x5851;&#x9020;&#x4E0B;&#x4E00;&#x6CE2;EDA&#x521B;&#x65B0;&#x6D6A;&#x6F6E;&#x7684;&#x5173;&#x952E;&#x8D8B;&#x52BF;" target="_blank">
+                            2026&#x5E74;&#xFF0C;&#x5851;&#x9020;&#x4E0B;&#x4E00;&#x6CE2;EDA&#x521B;&#x65B0;&#x6D6A;&#x6F6E;&#x7684;&#x5173;&#x952E;&#x8D8B;&#x52BF;
+                        </a>
+                    </div>
+                </li>
+                <li class="clear">
+                    <div class="fl">
+                        <a href="/article/3000177281" title="&#x3010;&#x56DE;&#x987E;&#x4E0E;&#x5C55;&#x671B;&#x3011;&#x82AF;&#x79D1;&#x79D1;&#x6280;&#xFF1A;&#x8FB9;&#x7F18;AI&#x91CD;&#x5851;&#x7269;&#x8054;&#x7F51;&#x672A;&#x6765;" target="_blank">
+                            <img src="//img.chinaaet.com/images/2026/04/20/20260420160003-57284.png" width="100" height="75" alt="&#x3010;&#x56DE;&#x987E;&#x4E0E;&#x5C55;&#x671B;&#x3011;&#x82AF;&#x79D1;&#x79D1;&#x6280;&#xFF1A;&#x8FB9;&#x7F18;AI&#x91CD;&#x5851;&#x7269;&#x8054;&#x7F51;&#x672A;&#x6765;">
+                        </a>
+                    </div>
+                    <div class="fr">
+                        <a href="/article/3000177281" title="&#x3010;&#x56DE;&#x987E;&#x4E0E;&#x5C55;&#x671B;&#x3011;&#x82AF;&#x79D1;&#x79D1;&#x6280;&#xFF1A;&#x8FB9;&#x7F18;AI&#x91CD;&#x5851;&#x7269;&#x8054;&#x7F51;&#x672A;&#x6765;" target="_blank">
+                            &#x3010;&#x56DE;&#x987E;&#x4E0E;&#x5C55;&#x671B;&#x3011;&#x82AF;&#x79D1;&#x79D1;&#x6280;&#xFF1A;&#x8FB9;&#x7F18;AI&#x91CD;&#x5851;&#x7269;&#x8054;&#x7F51;&#x672A;&#x6765;
+                        </a>
+                    </div>
+                </li>
+                <li class="clear">
+                    <div class="fl">
+                        <a href="/article/3000177153" title="&#x5965;&#x82AF;&#x660E;&#x8BB8;&#x5FD7;&#x4F1F;&#xFF1A;&#x201C;&#x5D4C;&#x5165;&#x5F0F;&#x534F;&#x540C;&#x201D;&#x7834;&#x5C40;" target="_blank">
+                            <img src="https://img.chinaaet.com/images/2026/04/13/6391168331011373001012380.jpg" width="100" height="75" alt="&#x5965;&#x82AF;&#x660E;&#x8BB8;&#x5FD7;&#x4F1F;&#xFF1A;&#x201C;&#x5D4C;&#x5165;&#x5F0F;&#x534F;&#x540C;&#x201D;&#x7834;&#x5C40;">
+                        </a>
+                    </div>
+                    <div class="fr">
+                        <a href="/article/3000177153" title="&#x5965;&#x82AF;&#x660E;&#x8BB8;&#x5FD7;&#x4F1F;&#xFF1A;&#x201C;&#x5D4C;&#x5165;&#x5F0F;&#x534F;&#x540C;&#x201D;&#x7834;&#x5C40;" target="_blank">
+                            &#x5965;&#x82AF;&#x660E;&#x8BB8;&#x5FD7;&#x4F1F;&#xFF1A;&#x201C;&#x5D4C;&#x5165;&#x5F0F;&#x534F;&#x540C;&#x201D;&#x7834;&#x5C40;
+                        </a>
+                    </div>
+                </li>
+                <li class="clear">
+                    <div class="fl">
+                        <a href="/article/3000177063" title="Develop&#x5E73;&#x53F0;&#x6253;&#x9020;&#x7535;&#x5B50;&#x7814;&#x53D1;&#x5168;&#x751F;&#x547D;&#x5468;&#x671F;&#x751F;&#x6001;" target="_blank">
+                            <img src="https://img.chinaaet.com/images/2026/04/03/6391081001140295629058606.jpg" width="100" height="75" alt="Develop&#x5E73;&#x53F0;&#x6253;&#x9020;&#x7535;&#x5B50;&#x7814;&#x53D1;&#x5168;&#x751F;&#x547D;&#x5468;&#x671F;&#x751F;&#x6001;">
+                        </a>
+                    </div>
+                    <div class="fr">
+                        <a href="/article/3000177063" title="Develop&#x5E73;&#x53F0;&#x6253;&#x9020;&#x7535;&#x5B50;&#x7814;&#x53D1;&#x5168;&#x751F;&#x547D;&#x5468;&#x671F;&#x751F;&#x6001;" target="_blank">
+                            Develop&#x5E73;&#x53F0;&#x6253;&#x9020;&#x7535;&#x5B50;&#x7814;&#x53D1;&#x5168;&#x751F;&#x547D;&#x5468;&#x671F;&#x751F;&#x6001;
+                        </a>
+                    </div>
+                </li>
+        </ul>
+    </div>
+</div>
+
+
+            <!--<div class="g2 clear">
+                <div class="g1-r" style="margin-top: 15px;text-align:center;">-->
+                    <!-- 广告位：内容页-E1(370*80px) -->
+                    <!--<script>
+                        (function () {
+                            var s = "_" + Math.random().toString(36).slice(2);
+                            document.write('<div id="' + s + '"></div>');
+                            (window.slotbydup = window.slotbydup || []).push({
+                                id: '5937584',
+                                container: s,
+                                size: '370,80',
+                                display: 'inlay-fix'
+                            });
+                        })();
+                    </script>
+                </div>
+            </div>-->
+
+            
+
+
+
+<!--//end of 视频-->
+
+
+
+<!--//end of 资源-->
+
+
+<!--//end of 博客-->
+
+
+        </aside>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+<footer>
+    <div class="main ">
+        <div class="footer-jj clear">
+            <ul class="diyi">
+                <li>
+                    网站相关
+                </li>
+                <li><a href="http://www.chinaaet.com/about/" rel="nofollow">关于我们</a></li>
+                <li><a href="http://www.chinaaet.com/about/contact/" rel="nofollow">联系我们</a></li>
+                <li><a href="http://www.chinaaet.com/paper/notice/" rel="nofollow">投稿须知</a> </li>
+            </ul>
+            <ul>
+                <li>
+                    广告及服务
+                </li>
+                <li><a href="http://www.chinaaet.com/about/license/" rel="nofollow">内容许可</a> </li>
+                <li><a href="http://www.chinaaet.com/about/adservices/" rel="nofollow">广告服务</a></li>
+                <li><a href="http://www.chinaaet.com/topic/subscribe/aet.html" rel="nofollow">杂志订阅</a></li>
+            </ul>
+            <ul>
+                <li>
+                    会员与积分
+                </li>
+                <li><a href="http://event.chinaaet.com/userstore" rel="nofollow">积分商城</a> </li>
+                <li><a href="http://www.chinaaet.com/about/userlevel/" rel="nofollow">会员等级</a> </li>
+                <li><a href="http://www.chinaaet.com/about/userPoints/" rel="nofollow">会员积分</a></li>
+                <li><a href="http://www.chinaaet.com/about/vipuser/" rel="nofollow">VIP会员</a></li>
+            </ul>
+            <ul>
+                <li class="weix">
+                    关注我们
+                </li>
+                <li>
+                    <img src="//st.chinaaet.com/www/main/images/gffgtrgf_14.jpg">
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="icp">
+        <p>Copyright © 2005-<span id="endyear" style="display: inline-block;">2024</span> 华北计算机系统工程研究所版权所有 <a href="https://beian.miit.gov.cn" target="_blank" style="color:#ffffff;">京ICP备10017138号-2</a> </p>
+
+        <script>
+
+            var currentYear = new Date().getFullYear();
+            document.getElementById('endyear').innerText = currentYear;
+
+        </script>
+    </div>
+</footer>
+
+
+
+
+
+    
+    <div id="openW_da" class="fix_open hide">
+        <!-- 广告位：内容页_ADI -->
+        <script>
+            (function () {
+                var s = "_" + Math.random().toString(36).slice(2);
+                document.write('<div id="' + s + '"></div>');
+                (window.slotbydup = window.slotbydup || []).push({
+                    id: '5822358',
+                    container: s,
+                    size: '640,480',
+                    display: 'inlay-fix'
+                });
+            })();
+        </script>
+    </div>
+
+
+    <script src="//st.chinaaet.com/www/main/labjs/all.min.js"></script>
+
+    
+    <script src="//st.chinaaet.com/www/main/labjs/layer/layer.js"></script>
+    <script src="//st.chinaaet.com/www/main/labjs/js.cookie/js.cookie.min.js"></script>
+    <script src="//st.chinaaet.com/main/js/login.js?t=20260327"></script>
+    <script src="//st.chinaaet.com/www/main/js/cpv.js?t=20191101"></script>
+    <script type="text/javascript">
+        setMenu(1);
+        var memberStatus = 0;
+        var userId = 0;
+        var loginStatus = 0;
+
+        if(loginStatus > 0){
+            if(userId <= 0){
+                ChinaaetLogin.ShowLogin('请登录后再查看......',function (data) {
+                    if (data.isSuccess) {
+                        location.reload();
+                    }
+                });
+            }
+            else{
+                if(loginStatus==2 && memberStatus <3){
+                    layer.open({
+                        type: 1,
+                        title: '请完善详细信息后再查看......',
+                        closeBtn: 0,
+                        shadeClose: false,
+                        move: false,
+                        shade: [0.8, '#000'],
+                        area: ['260px','100px'],
+                        content: '<div class="dialog-div"><a href="http://www.chinaaet.com/profile/settings/?returnurl='+ encodeURIComponent(location.href) +'" title="完善注册信息" class="dialog-a" style="">完善详细信息</a></div>'
+                    });
+                }
+            }
+        }
+
+        //openCpv(9110000005);
+
+        ////////adi 本地随机弹窗
+        //openFull_Adi(3);
+
+
+    </script>
+
+
+
+    <script type="text/javascript">
+        var cnzz_s_tag = document.createElement('script');
+        cnzz_s_tag.type = 'text/javascript';
+        cnzz_s_tag.async = true;
+        cnzz_s_tag.charset = 'utf-8';
+        cnzz_s_tag.src = 'https://w.cnzz.com/c.php?id=3455603&async=1';
+        var cnzz_s = document.getElementsByTagName('script')[0];
+        cnzz_s.parentNode.insertBefore(cnzz_s_tag, cnzz_s);
+
+
+    </script>
+
+</body>
+</html >
