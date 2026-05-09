@@ -8,9 +8,14 @@
 *.user
 *.suo
 *.userprefs
+~$*
 
 # Logs
 *.log
+
+# Python caches
+__pycache__/
+*.py[cod]
 
 # Local .NET CLI home
 .dotnet-local/
