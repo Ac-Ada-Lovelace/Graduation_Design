@@ -70,3 +70,36 @@ CSV 的设备列必须与 `model_meta.json` 中的 `appliances` 一致。若模�
 ## 6. 当前风险
 
 当前仓库已有 Stage-02 源码、服务接口、回放脚本、注册表和论文第五章草稿，但缺少可直接复现的模型包 zip、处理后 CSV 和原始验收报告。没有这些文件时，第 5 章只能说明推理服务设计实现，第 7 章无法形成完整的本机复现实验结论。
+
+## 7. 本机交付状态更新
+
+更新日期：2026-05-12
+
+当前机器已确认为 GPU 训练机。需求表中的 P0/P1 复现实验工件已在本机找到并整理进本次交付分支，后续 CPU 复现实验可直接按 Stage-02 运行手册执行。
+
+| 优先级 | 需求项 | 状态 | 交付路径 |
+| --- | --- | --- | --- |
+| P0 | 标准模型包 event optimized | 已交付 | `stages/stage-02/model/artifacts/packages/kmt_multi_w301_20260323_155405_thopt_20260323_161139__event_optimized.zip` |
+| P0 | 标准模型包 error optimized | 已交付 | `stages/stage-02/model/artifacts/packages/kmt_multi_w301_20260323_155405_calibrated_20260323_161136__error_optimized.zip` |
+| P0 | 推理/验收 CSV | 已交付 | `stages/stage-02/model/data/processed/house_1_1s_kmt/timeseries_1s_train_ready.csv` |
+| P0 | 模型包对应设备清单 | 已交付 | 模型包内 `model_meta.json`，设备为 `kettle`、`microwave`、`toaster` |
+| P1 | 固定区间验收报告 event optimized | 已交付 | `stages/stage-02/model/runs/acceptance_20260323_164509/report.json`、`report.md` |
+| P1 | 固定区间验收报告 error optimized | 已交付 | `stages/stage-02/model/runs/acceptance_20260323_164303/report.json`、`report.md` |
+| P1 | ONNX parity check | 已交付 | 两个标准模型包内均包含 `onnx_parity_check.json` |
+| P1 | 校准/阈值优化报告 | 已交付 | 模型包内包含 `threshold_optimization_report.json` 或相关后处理文件 |
+
+本机已执行以下校验：
+
+```powershell
+python integration\manage_package_registry.py verify-active
+python integration\run_service_api_checks.py
+python integration\run_demo_smoke.py --data-csv model\data\processed\house_1_1s_kmt\timeseries_1s_train_ready.csv --speed 200 --max-rows 320
+```
+
+校验结果：
+
+- active package 路径存在。
+- API 检查通过，输出 `[api-check] PASS (session + offline + online)`。
+- 在线 smoke 通过，输出 `[smoke] PASS`，且 `latest ready=True`、`pred_count=20`。
+
+详细交付记录见：`thesis/chapter_workpacks/第5章_模型包与CPU复现实验本机交付记录_2026-05-12.md`。

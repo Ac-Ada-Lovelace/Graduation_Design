@@ -1,0 +1,71 @@
+{
+  "raw_root_read_only": "D:\\repos\\Graduation_Design\\stages\\stage-02\\model\\data\\raw\\uk-dale",
+  "output_dir": "D:\\repos\\Graduation_Design\\stages\\stage-02\\model\\data\\processed\\house_1_1s_kmt",
+  "house": "house_1",
+  "appliances": [
+    "kettle",
+    "microwave",
+    "toaster"
+  ],
+  "time_window": {
+    "start_epoch": 1363547564,
+    "end_epoch": 1364152363,
+    "duration_seconds": 604800,
+    "start_utc": "2013-03-17T19:12:44+00:00",
+    "end_utc": "2013-03-24T19:12:43+00:00"
+  },
+  "rows": {
+    "full_1s": 604800,
+    "train_ready": 532616,
+    "train_ready_ratio": 0.8806481481481482
+  },
+  "missing_ratio": {
+    "mains_w": 0.05318783068783069,
+    "kettle_w": 0.03878141534391535,
+    "microwave_w": 0.04071593915343916,
+    "toaster_w": 0.04650628306878307
+  },
+  "series_stats": {
+    "mains": {
+      "name": "mains.dat",
+      "rows_scanned": 2000000,
+      "rows_in_range": 601875,
+      "unique_seconds": 572632,
+      "first_second": 1363547564,
+      "last_second": 1364152363
+    },
+    "kettle": {
+      "name": "channel_10.dat",
+      "rows_scanned": 3000000,
+      "rows_in_range": 86848,
+      "unique_seconds": 86848,
+      "first_second": 1363547567,
+      "last_second": 1364152359
+    },
+    "microwave": {
+      "name": "channel_13.dat",
+      "rows_scanned": 3000000,
+      "rows_in_range": 86749,
+      "unique_seconds": 86749,
+      "first_second": 1363547570,
+      "last_second": 1364152363
+    },
+    "toaster": {
+      "name": "channel_11.dat",
+      "rows_scanned": 3000000,
+      "rows_in_range": 86324,
+      "unique_seconds": 86324,
+      "first_second": 1363547567,
+      "last_second": 1364152360
+    }
+  },
+  "rules": {
+    "mains_fill": "none",
+    "appliance_fill": "forward_fill_limit_6s",
+    "raw_data_mutation": "disabled_by_design"
+  },
+  "artifacts": {
+    "full_csv": "D:\\repos\\Graduation_Design\\stages\\stage-02\\model\\data\\processed\\house_1_1s_kmt\\timeseries_1s_full.csv",
+    "train_ready_csv": "D:\\repos\\Graduation_Design\\stages\\stage-02\\model\\data\\processed\\house_1_1s_kmt\\timeseries_1s_train_ready.csv"
+  }
+}

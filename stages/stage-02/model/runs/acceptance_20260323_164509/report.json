@@ -1,0 +1,154 @@
+{
+  "created_at_utc": "2026-03-23T08:45:09.062035+00:00",
+  "interface_version": "nilm_model_interface_v1",
+  "package_zip": "D:\\repos\\Graduation_Design\\stages\\stage-02\\model\\artifacts\\packages\\kmt_multi_w301_20260323_155405_thopt_20260323_161139__event_optimized.zip",
+  "data_csv": "D:\\repos\\Graduation_Design\\stages\\stage-02\\model\\data\\processed\\house_1_1s_kmt\\timeseries_1s_train_ready.csv",
+  "intervals_json": "D:\\repos\\Graduation_Design\\stages\\stage-02\\model\\configs\\stage02_acceptance_intervals_kmt.json",
+  "appliances": [
+    "kettle",
+    "microwave",
+    "toaster"
+  ],
+  "window_size": 301,
+  "sample_period_s": 1.0,
+  "onnx_providers": [
+    "CPUExecutionProvider"
+  ],
+  "manifest_validated": true,
+  "interval_results": [
+    {
+      "rows": 900,
+      "start_utc": "2013-03-24 07:43:11+00:00",
+      "end_utc": "2013-03-24 08:00:24+00:00",
+      "mae_w_avg": 14.342196464538574,
+      "rmse_w_avg": 52.13608169555664,
+      "per_appliance": {
+        "kettle": {
+          "mae_w": 20.49732780456543,
+          "rmse_w": 70.89791107177734
+        },
+        "microwave": {
+          "mae_w": 14.861932754516602,
+          "rmse_w": 65.84784698486328
+        },
+        "toaster": {
+          "mae_w": 7.667325973510742,
+          "rmse_w": 19.662485122680664
+        }
+      },
+      "event_metrics": {
+        "per_appliance": {
+          "kettle": {
+            "f1_on": 1.0,
+            "f1_off": 1.0,
+            "f1_avg": 1.0
+          },
+          "microwave": {
+            "f1_on": 1.0,
+            "f1_off": 1.0,
+            "f1_avg": 1.0
+          },
+          "toaster": {
+            "f1_on": 1.0,
+            "f1_off": 1.0,
+            "f1_avg": 1.0
+          }
+        },
+        "f1_avg": 1.0
+      },
+      "id": "kmt_15m_a",
+      "minutes": 15
+    },
+    {
+      "rows": 1200,
+      "start_utc": "2013-03-24 07:37:52+00:00",
+      "end_utc": "2013-03-24 08:00:24+00:00",
+      "mae_w_avg": 11.231900215148926,
+      "rmse_w_avg": 45.163143157958984,
+      "per_appliance": {
+        "kettle": {
+          "mae_w": 16.296798706054688,
+          "rmse_w": 61.42718505859375
+        },
+        "microwave": {
+          "mae_w": 11.440552711486816,
+          "rmse_w": 57.02894592285156
+        },
+        "toaster": {
+          "mae_w": 5.958349227905273,
+          "rmse_w": 17.033288955688477
+        }
+      },
+      "event_metrics": {
+        "per_appliance": {
+          "kettle": {
+            "f1_on": 1.0,
+            "f1_off": 1.0,
+            "f1_avg": 1.0
+          },
+          "microwave": {
+            "f1_on": 1.0,
+            "f1_off": 1.0,
+            "f1_avg": 1.0
+          },
+          "toaster": {
+            "f1_on": 1.0,
+            "f1_off": 1.0,
+            "f1_avg": 1.0
+          }
+        },
+        "f1_avg": 1.0
+      },
+      "id": "kmt_20m_a",
+      "minutes": 20
+    },
+    {
+      "rows": 1800,
+      "start_utc": "2013-03-24 07:27:15+00:00",
+      "end_utc": "2013-03-24 08:00:24+00:00",
+      "mae_w_avg": 8.120955467224121,
+      "rmse_w_avg": 36.89507293701172,
+      "per_appliance": {
+        "kettle": {
+          "mae_w": 12.09556770324707,
+          "rmse_w": 50.20038986206055
+        },
+        "microwave": {
+          "mae_w": 8.016098976135254,
+          "rmse_w": 46.56881332397461
+        },
+        "toaster": {
+          "mae_w": 4.251198768615723,
+          "rmse_w": 13.916016578674316
+        }
+      },
+      "event_metrics": {
+        "per_appliance": {
+          "kettle": {
+            "f1_on": 1.0,
+            "f1_off": 1.0,
+            "f1_avg": 1.0
+          },
+          "microwave": {
+            "f1_on": 1.0,
+            "f1_off": 1.0,
+            "f1_avg": 1.0
+          },
+          "toaster": {
+            "f1_on": 1.0,
+            "f1_off": 1.0,
+            "f1_avg": 1.0
+          }
+        },
+        "f1_avg": 1.0
+      },
+      "id": "kmt_30m_a",
+      "minutes": 30
+    }
+  ],
+  "aggregate": {
+    "mae_w_avg_of_intervals": 11.231684684753418,
+    "rmse_w_avg_of_intervals": 44.7314338684082,
+    "event_f1_avg_of_intervals": 1.0
+  }
+}
