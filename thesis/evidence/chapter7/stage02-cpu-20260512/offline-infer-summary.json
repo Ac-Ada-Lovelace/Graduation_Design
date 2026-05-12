@@ -1,0 +1,243 @@
+{
+  "request": {
+    "start_utc": "2013-03-19T17:35:02Z",
+    "end_utc": "2013-03-19T18:42:14Z",
+    "event_tolerance_s": 10,
+    "max_points": 6000,
+    "target_points": 600
+  },
+  "model_version": null,
+  "appliances": [
+    "kettle",
+    "microwave",
+    "toaster"
+  ],
+  "metrics": {
+    "mae_avg_w": 17.57781410217285,
+    "rmse_avg_w": 112.37409210205078,
+    "mean_diff_avg_w": 7.292431831359863,
+    "max_abs_diff_w": 2481.427490234375,
+    "per_appliance": {
+      "kettle": {
+        "mae_w": 20.894927978515625,
+        "rmse_w": 145.49163818359375,
+        "mean_diff_w": 12.401947975158691,
+        "max_abs_diff_w": 2481.427490234375,
+        "event_mean_abs_delta_s": 6.5,
+        "event_p95_abs_delta_s": 8.75,
+        "event_on": {
+          "pairs": [
+            {
+              "true_index": 3247,
+              "pred_index": 3243,
+              "delta_s": -4,
+              "abs_delta_s": 4,
+              "type": "on"
+            }
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_count": 1,
+          "pred_count": 1,
+          "matched_count": 1,
+          "mean_abs_delta_s": 4.0,
+          "p95_abs_delta_s": 4.0
+        },
+        "event_off": {
+          "pairs": [
+            {
+              "true_index": 3352,
+              "pred_index": 3361,
+              "delta_s": 9,
+              "abs_delta_s": 9,
+              "type": "off"
+            }
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_count": 1,
+          "pred_count": 1,
+          "matched_count": 1,
+          "mean_abs_delta_s": 9.0,
+          "p95_abs_delta_s": 9.0
+        }
+      },
+      "microwave": {
+        "mae_w": 11.261116981506348,
+        "rmse_w": 71.2474136352539,
+        "mean_diff_w": 7.199743747711182,
+        "max_abs_diff_w": 1478.466552734375,
+        "event_mean_abs_delta_s": 3.0,
+        "event_p95_abs_delta_s": 5.699999809265137,
+        "event_on": {
+          "pairs": [
+            {
+              "true_index": 66,
+              "pred_index": 66,
+              "delta_s": 0,
+              "abs_delta_s": 0,
+              "type": "on"
+            }
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_count": 1,
+          "pred_count": 1,
+          "matched_count": 1,
+          "mean_abs_delta_s": 0.0,
+          "p95_abs_delta_s": 0.0
+        },
+        "event_off": {
+          "pairs": [
+            {
+              "true_index": 100,
+              "pred_index": 106,
+              "delta_s": 6,
+              "abs_delta_s": 6,
+              "type": "off"
+            }
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_count": 1,
+          "pred_count": 1,
+          "matched_count": 1,
+          "mean_abs_delta_s": 6.0,
+          "p95_abs_delta_s": 6.0
+        }
+      },
+      "toaster": {
+        "mae_w": 20.577396392822266,
+        "rmse_w": 120.38323211669922,
+        "mean_diff_w": 2.275601625442505,
+        "max_abs_diff_w": 1627.0162353515625,
+        "event_mean_abs_delta_s": 3.8333332538604736,
+        "event_p95_abs_delta_s": 6.5,
+        "event_on": {
+          "pairs": [
+            {
+              "true_index": 193,
+              "pred_index": 191,
+              "delta_s": -2,
+              "abs_delta_s": 2,
+              "type": "on"
+            },
+            {
+              "true_index": 1815,
+              "pred_index": 1811,
+              "delta_s": -4,
+              "abs_delta_s": 4,
+              "type": "on"
+            },
+            {
+              "true_index": 2729,
+              "pred_index": 2730,
+              "delta_s": 1,
+              "abs_delta_s": 1,
+              "type": "on"
+            }
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_count": 3,
+          "pred_count": 3,
+          "matched_count": 3,
+          "mean_abs_delta_s": 2.3333332538604736,
+          "p95_abs_delta_s": 3.799999952316284
+        },
+        "event_off": {
+          "pairs": [
+            {
+              "true_index": 324,
+              "pred_index": 331,
+              "delta_s": 7,
+              "abs_delta_s": 7,
+              "type": "off"
+            },
+            {
+              "true_index": 1956,
+              "pred_index": 1960,
+              "delta_s": 4,
+              "abs_delta_s": 4,
+              "type": "off"
+            },
+            {
+              "true_index": 2866,
+              "pred_index": 2871,
+              "delta_s": 5,
+              "abs_delta_s": 5,
+              "type": "off"
+            }
+          ],
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_count": 3,
+          "pred_count": 3,
+          "matched_count": 3,
+          "mean_abs_delta_s": 5.333333492279053,
+          "p95_abs_delta_s": 6.800000190734863
+        }
+      }
+    },
+    "event": {
+      "per_appliance": {
+        "kettle": {
+          "f1_on": 1.0,
+          "f1_off": 1.0,
+          "f1_avg": 1.0
+        },
+        "microwave": {
+          "f1_on": 1.0,
+          "f1_off": 1.0,
+          "f1_avg": 1.0
+        },
+        "toaster": {
+          "f1_on": 1.0,
+          "f1_off": 1.0,
+          "f1_avg": 1.0
+        }
+      },
+      "f1_avg": 1.0
+    }
+  },
+  "config": {
+    "data_csv": "D:\\repos\\Graduation_Design\\stages\\stage-02\\model\\data\\processed\\house_1_1s_kmt\\timeseries_1s_train_ready.csv",
+    "start_utc": "2013-03-19T17:35:02Z",
+    "end_utc": "2013-03-19T18:42:14Z",
+    "window_size": 301,
+    "sample_period_s": 1.0,
+    "appliances": [
+      "kettle",
+      "microwave",
+      "toaster"
+    ],
+    "event_tolerance_s": 10,
+    "point_count_full": 3571,
+    "point_count_returned": 420,
+    "downsample_applied": true
+  },
+  "series_lengths": {
+    "timestamp_utc": 420,
+    "mains_w": 420
+  },
+  "event_counts": {
+    "kettle": {
+      "true_count": 2,
+      "pred_count": 2
+    },
+    "microwave": {
+      "true_count": 2,
+      "pred_count": 2
+    },
+    "toaster": {
+      "true_count": 6,
+      "pred_count": 6
+    }
+  }
+}

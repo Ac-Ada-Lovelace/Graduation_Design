@@ -67,9 +67,11 @@ CSV 的设备列必须与 `model_meta.json` 中的 `appliances` 一致。若模�
 | 4 | 运行 `run_demo_smoke.py` | `latest.ready=True` 且 `pred_count>0` | smoke 输出 |
 | 5 | 整理第 7 章测试证据 | 指标、命令、截图或报告可引用 | 章节证据包 |
 
-## 6. 当前风险
+## 6. 当前交付状态
 
-当前仓库已有 Stage-02 源码、服务接口、回放脚本、注册表和论文第五章草稿，但缺少可直接复现的模型包 zip、处理后 CSV 和原始验收报告。没有这些文件时，第 5 章只能说明推理服务设计实现，第 7 章无法形成完整的本机复现实验结论。
+2026-05-12 训练机器已补齐可直接复现的模型包 zip、处理后 CSV 和原始验收报告，并已合入当前工作分支。当前本机已完成 `verify-active`、`run_service_api_checks.py` 和 `run_demo_smoke.py` 验证，运行输出已保存到 `thesis/evidence/chapter7/stage02-cpu-20260512/`。
+
+后续第 7 章可以直接引用本次交付物和本机 CPU 验证结果；如果重新训练或更换模型包，应按本表重新提交模型包、CSV、验收报告和 smoke/API 检查输出。
 
 ## 7. 本机交付状态更新
 

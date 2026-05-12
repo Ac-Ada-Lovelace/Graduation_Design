@@ -1,0 +1,68 @@
+{
+  "request": {
+    "start_utc": "2013-03-19T17:24:44Z",
+    "end_utc": "2013-03-19T17:34:44Z",
+    "speed": 500,
+    "max_rows": 420
+  },
+  "running": false,
+  "sent_rows": 420,
+  "latest": {
+    "ready": true,
+    "timestamp_utc": "2013-03-19T17:32:01Z",
+    "pred_w": {
+      "kettle": 0.0,
+      "microwave": 0.0,
+      "toaster": 0.0
+    },
+    "events": [],
+    "model_version": "kmt_multi_w301_20260323_155405_thopt_20260323_161139__event_optimized.zip",
+    "buffer_fill": 301,
+    "window_size": 301,
+    "ingest_count": 420,
+    "pred_count": 120
+  },
+  "metrics": {
+    "mae_avg_w": 0.8262615203857422,
+    "rmse_avg_w": 0.8668332695960999,
+    "mean_diff_avg_w": -0.8241772055625916,
+    "max_abs_diff_w": 1.0,
+    "per_appliance": {
+      "kettle": {
+        "mae_w": 1.0,
+        "rmse_w": 1.0,
+        "mean_diff_w": -1.0,
+        "max_abs_diff_w": 1.0
+      },
+      "microwave": {
+        "mae_w": 0.9948976039886475,
+        "rmse_w": 0.9950939416885376,
+        "mean_diff_w": -0.9948974847793579,
+        "max_abs_diff_w": 1.0
+      },
+      "toaster": {
+        "mae_w": 0.4838869869709015,
+        "rmse_w": 0.605405867099762,
+        "mean_diff_w": -0.47763410210609436,
+        "max_abs_diff_w": 1.0
+      }
+    }
+  },
+  "history_lengths": {
+    "timestamp_utc": 120,
+    "true_w": {
+      "kettle": 120,
+      "microwave": 120,
+      "toaster": 120
+    },
+    "pred_w": {
+      "kettle": 120,
+      "microwave": 120,
+      "toaster": 120
+    }
+  },
+  "event_stream_counts": {
+    "true": 0,
+    "pred": 0
+  }
+}

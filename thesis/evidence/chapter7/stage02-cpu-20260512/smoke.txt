@@ -1,0 +1,25 @@
+[replay] sent=100 skipped=0 avg_send_rate=49.54 rows/s latest_ready=False latest_ts=2013-03-17T19:14:41Z
+[replay] sent=200 skipped=0 avg_send_rate=48.53 rows/s latest_ready=False latest_ts=2013-03-17T19:16:21Z
+[replay] sent=300 skipped=0 avg_send_rate=45.66 rows/s latest_ready=False latest_ts=2013-03-17T19:18:01Z
+[replay] completed sent=320 skipped=0 elapsed=7.00s avg_send_rate=45.72 rows/s
+[smoke] starting service: D:\repos\Graduation_Design\stages\stage-02\.venv\Scripts\python.exe -m uvicorn service.app:app --host 127.0.0.1 --port 18080 --log-level warning --no-access-log
+[smoke] service is healthy
+[smoke] session started: model=seq2point-kmt_multi_w301_20260323_155405 window=301
+[smoke] replay: D:\repos\Graduation_Design\stages\stage-02\.venv\Scripts\python.exe D:\repos\Graduation_Design\stages\stage-02\replay\stream_csv.py --data-csv D:\repos\Graduation_Design\stages\stage-02\model\data\processed\house_1_1s_kmt\timeseries_1s_train_ready.csv --service-base-url http://127.0.0.1:18080 --speed 200.0 --max-rows 320 --log-every 100
+[smoke] latest ready=True pred_count=20
+{
+  "ready": true,
+  "timestamp_utc": "2013-03-17T19:18:21Z",
+  "pred_w": {
+    "kettle": 0.0,
+    "microwave": 0.0,
+    "toaster": 0.9050426483154297
+  },
+  "events": [],
+  "model_version": "kmt_multi_w301_20260323_155405_thopt_20260323_161139__event_optimized.zip",
+  "buffer_fill": 301,
+  "window_size": 301,
+  "ingest_count": 320,
+  "pred_count": 20
+}
+[smoke] PASS

@@ -66,13 +66,17 @@
 - `stages/stage-02/model/docs/stage02_deploy_acceptance.md`
   - 模型包导出和固定区间验收命令。
 
-## 4. 当前证据缺口
+## 4. 当前证据状态
 
-当前工作区包含 Stage-02 源码、设计文档、注册表和运行手册，但未看到实际 `artifacts/packages/` 模型包 zip，也未看到 `model/runs/acceptance_*/report.json` 原始验收报告目录。因此：
+2026-05-12 训练机器已通过远程分支补齐 Stage-02 可复现实验工件，当前工作区已经包含：
 
-1. 第 5 章正文可以引用“注册表和运行手册记录的基准包与指标”，但措辞应写为项目记录中的基准结果，不要写成当前工作区即时复现实验结果。
-2. 第 7 章正式测试前，建议补回模型包、验收报告和处理后的 CSV，或重新跑一次 `verify-active`、`run_service_api_checks.py`、`run_demo_smoke.py`。
-3. 如果短期无法补齐工件，第 5 章中可保留设计实现描述，把指标表的最终引用放到第 7 章再落定。
+1. 两个模型包 zip：event optimized 和 error optimized。
+2. 处理后 CSV：`stages/stage-02/model/data/processed/house_1_1s_kmt/timeseries_1s_train_ready.csv`。
+3. 数据质量报告：`quality_report.json`。
+4. 两套 acceptance report：`acceptance_20260323_164509` 和 `acceptance_20260323_164303`。
+5. 本机 CPU 验证输出：`thesis/evidence/chapter7/stage02-cpu-20260512/`。
+
+本机已完成 `verify-active`、`run_service_api_checks.py` 和 `run_demo_smoke.py` 验证。第 5 章可以把模型包和验收指标写为已补齐证据，第 7 章负责展开测试过程和结果分析。
 
 ## 5. 建议图表
 

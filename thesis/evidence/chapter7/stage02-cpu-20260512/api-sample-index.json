@@ -1,0 +1,15 @@
+{
+  "health": {
+    "status": "ok",
+    "interface_version": "nilm_model_interface_v1",
+    "has_session": false,
+    "registry_active_package": "artifacts/packages/kmt_multi_w301_20260323_155405_thopt_20260323_161139__event_optimized.zip"
+  },
+  "data_range": {
+    "start_utc": "2013-03-17T19:12:50Z",
+    "end_utc": "2013-03-24T19:12:43Z",
+    "rows": 532616
+  },
+  "offline_summary_file": "offline-infer-summary.json",
+  "online_summary_file": "online-status-summary.json"
+}

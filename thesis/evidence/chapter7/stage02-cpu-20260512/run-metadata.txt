@@ -1,0 +1,8 @@
+run_id=stage02-cpu-20260512
+date=2026-05-12
+cwd=D:\repos\Graduation_Design
+branch=codex/chapter5-model-package-requirements
+commit=84c2a319801dfaf549bf6a1b76558666cf687001
+python=Python 3.12.13
+stage02_root=stages/stage-02
+active_package_expected=event_optimized

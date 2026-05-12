@@ -1,0 +1,3 @@
+active_package=artifacts/packages/kmt_multi_w301_20260323_155405_thopt_20260323_161139__event_optimized.zip
+resolved_path=D:\repos\Graduation_Design\stages\stage-02\model\artifacts\packages\kmt_multi_w301_20260323_155405_thopt_20260323_161139__event_optimized.zip
+exists=True
