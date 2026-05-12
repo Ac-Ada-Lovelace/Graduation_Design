@@ -16,6 +16,7 @@
 # Python caches
 __pycache__/
 *.py[cod]
+.venv/
 
 # Local .NET CLI home
 .dotnet-local/
